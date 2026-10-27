@@ -1,0 +1,89 @@
+@media (min-width: 1500px) {
+  .hero {
+    padding-block: 105px;
+  }
+  .hero-grid {
+    gap: 80px;
+  }
+  .hero-showcase {
+    padding: 35px;
+  }
+  .hero-title {
+    font-size: 80px;
+  }
+}
+@media (max-width: 1050px) {
+  .container {
+    width: calc(100% - 60px);
+  }
+  .header-inner {
+    gap: 20px;
+  }
+  .nav {
+    gap: 18px;
+  }
+  .header-cta {
+    font-size: 10px;
+    gap: 10px;
+    padding: 12px;
+  }
+  .hero-grid {
+    gap: 30px;
+  }
+  .hero h1 {
+    font-size: 58px;
+  }
+  .hero-copy > p {
+    font-size: 13px;
+  }
+  .hero .eyebrow {
+    font-size: 8px;
+  }
+  .hero-showcase {
+    padding: 20px 16px 30px;
+  }
+  .hero-actions .button {
+    font-size: 10px;
+    padding: 16px;
+  }
+  .hero-note {
+    font-size: 8px;
+    gap: 10px;
+  }
+  .hero-note span + span:before {
+    margin-right: 10px;
+  }
+  .featured-grid {
+    gap: 50px;
+  }
+  .service-card {
+    padding: 22px;
+  }
+  .service-card h3 {
+    font-size: 19px;
+  }
+  .service-card p {
+    min-height: 110px;
+  }
+  .contact-grid {
+    gap: 50px;
+  }
+  .project-card {
+    gap: 35px;
+  }
+  .about-grid {
+    gap: 40px;
+  }
+  .about-art {
+    padding: 25px;
+  }
+  .about-art > strong {
+    font-size: 52px;
+  }
+  .nova-title strong {
+    font-size: 32px;
+  }
+  .footer-bottom {
+    flex-wrap: wrap;
+  }
+}
