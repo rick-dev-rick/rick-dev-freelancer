@@ -1,0 +1,96 @@
+<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark"><title>RICK BOT · Radar de ofertas</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0b100e;color:#edf6ef;font:16px system-ui,sans-serif}header,main{max-width:1160px;margin:auto;padding:24px}header{display:flex;align-items:center;justify-content:space-between;gap:16px}b em{font-style:normal;color:#72ffa5}.logo{letter-spacing:.13em}small,.muted{color:#a4b6aa}.hero{padding:clamp(24px,6vw,64px);border:1px solid #304539;border-radius:28px;background:radial-gradient(ellipse at top right,#244c34,transparent 65%),#101a14}.eyebrow{letter-spacing:.18em;color:#72ffa5;font-size:.72rem;font-weight:750}h1{font-size:clamp(2.65rem,8vw,5.6rem);line-height:.96;letter-spacing:-.075em;margin:.22em 0}h2{margin:0 0 10px}.hero p:last-child{max-width:42ch;line-height:1.55}.stats,.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px;margin:16px 0 28px}.card,.stat,.empty{border:1px solid #293a30;border-radius:18px;background:#111b15;padding:18px}.stat strong{display:block;font-size:2rem;color:#8dffb7}.tools{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}.tools input{flex:1;min-width:200px}input,select,button,.button{font:inherit;padding:11px 13px;border:1px solid #3a5344;border-radius:10px;background:#18271e;color:inherit}button,.button{cursor:pointer}.button{display:inline-block;text-decoration:none}.primary{background:#84ffaa;color:#09180f;border-color:#84ffaa;font-weight:750}.card h3{margin:.65em 0;line-height:1.25}.card p{margin:.45em 0}.card a{color:#8dffb7}footer{padding:12px 0;color:#a4b6aa}input[type=file]{position:absolute;width:1px;height:1px;opacity:0}label:focus-within{outline:2px solid #fff}@media(max-width:560px){header,main{padding:16px}.stats{grid-template-columns:repeat(3,1fr)}.stat{padding:10px}.stat strong{font-size:1.5rem}.stat small{font-size:.7rem}}
+</style>
+<header><b class="logo">◈ RICK<em>BOT</em></b><label class="button primary">Importar painel<input id="file" type="file" accept=".md,text/markdown,text/plain"></label></header>
+<main><section class="hero"><span class="eyebrow">SMART PRICE HUNTER / RADAR PESSOAL</span><h1>Seu radar<br>de ofertas.</h1><p class="muted">Cotações, preços-alvo e resultados de busca em um painel feito para acompanhar suas compras.</p></section>
+<section class="stats" aria-label="Resumo"><div class="stat"><strong id="total">—</strong><small>Itens no radar</small></div><div class="stat"><strong id="quoted">—</strong><small>Com cotação</small></div><div class="stat"><strong id="market">—</strong><small>Com oferta de marketplace</small></div></section>
+<h2>Lista de acompanhamento</h2><p id="status" class="muted" role="status">Importe o arquivo PAINEL.md do radar para visualizar seus dados neste dispositivo.</p>
+<p><a class="button" href="https://github.com/rick-dev-rick/RICK-BOT/blob/radar-state/PAINEL.md" target="_blank" rel="noopener noreferrer">Obter relatório privado ↗</a></p><div class="tools"><input id="search" type="search" placeholder="Buscar produto" aria-label="Buscar produto"><select id="category" aria-label="Categoria"><option value="">Todas as categorias</option></select><select id="filter" aria-label="Disponibilidade"><option value="">Todas as situações</option><option value="quoted">Com cotação</option><option value="market">Com oferta de marketplace</option></select></div>
+<div id="cards" class="grid"></div><footer>Os preços correspondem à coleta importada e podem mudar. Valores sem frete.</footer></main>
+<script>
+const byId = id => document.getElementById(id);
+const normalize = value => value.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
+const unescapeCell = value => value.replace(/\\([|\[\]\\*`_])/g, '$1').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+function cell(value) {
+  const link = value.match(/^\[(.*?)\]\(<(https:\/\/[^>]+)>\)(.*)$/);
+  if (!link) return { label: unescapeCell(value) };
+  try {
+    const url = new URL(link[2]);
+    if (!url.username && !url.password) return { label: unescapeCell(link[1]), url: url.href, note: unescapeCell(link[3]) };
+  } catch {}
+  return { label: unescapeCell(value) };
+}
+function parse(text) {
+  if (!text.startsWith('# RICK BOT · Painel de compras')) throw new Error('Selecione o PAINEL.md gerado pelo RICK BOT.');
+  let category = '';
+  const rows = [];
+  for (const line of text.split(/\r?\n/)) {
+    if (line.startsWith('## ')) category = line.slice(3);
+    if (!category || !line.startsWith('| ') || /^\| (?:---|Produto \||Jogo \|)/.test(line)) continue;
+    const columns = line.slice(1, -1).split(/(?<!\\)\|/).map(value => value.trim());
+    if (columns.length !== 3) continue;
+    const [name, direct, third] = columns;
+    rows.push({ category, name: unescapeCell(name), direct: cell(direct), third: cell(third) });
+  }
+  if (!rows.length) throw new Error('Nenhum item encontrado no arquivo.');
+  return rows;
+}
+let rows = [];
+const marketOffer = row => row.category !== 'PlayStation' && Boolean(row.third.url);
+const hasQuote = row => Boolean(row.direct.url) || marketOffer(row);
+function addText(parent, tag, text, className) {
+  const element = document.createElement(tag);
+  element.textContent = text;
+  if (className) element.className = className;
+  parent.append(element);
+  return element;
+}
+function showCell(card, title, entry) {
+  const line = addText(card, 'p', '');
+  addText(line, 'small', title + ' · ');
+  if (entry.url) {
+    const link = addText(line, 'a', entry.label);
+    link.href = entry.url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    if (entry.note) addText(line, 'small', entry.note);
+  } else addText(line, 'span', entry.label);
+}
+function render() {
+  const term = normalize(byId('search').value.trim());
+  const category = byId('category').value;
+  const filter = byId('filter').value;
+  const visible = rows.filter(row => normalize(row.name).includes(term) && (!category || row.category === category) &&
+    (filter === 'quoted' ? hasQuote(row) : filter === 'market' ? marketOffer(row) : true));
+  const cards = byId('cards');
+  cards.replaceChildren();
+  if (!visible.length) addText(cards, 'p', rows.length ? 'Nenhum item corresponde aos filtros.' : 'Seu radar aparece aqui depois da importação.', 'empty');
+  for (const row of visible) {
+    const card = addText(cards, 'article', '', 'card');
+    addText(card, 'span', row.category, 'eyebrow');
+    addText(card, 'h3', row.name);
+    showCell(card, 'Loja cadastrada', row.direct);
+    showCell(card, row.category === 'PlayStation' ? 'Preço-alvo' : 'Amazon / Mercado Livre', row.third);
+  }
+}
+byId('file').addEventListener('change', async event => {
+  const file = event.target.files[0];
+  if (!file) return;
+  try {
+    if (file.size > 1000000) throw new Error('O arquivo ultrapassa o tamanho esperado.');
+    rows = parse(await file.text());
+    const select = byId('category');
+    select.length = 1;
+    for (const category of new Set(rows.map(row => row.category))) select.add(new Option(category, category));
+    byId('total').textContent = rows.length;
+    byId('quoted').textContent = rows.filter(hasQuote).length;
+    byId('market').textContent = rows.filter(marketOffer).length;
+    byId('status').textContent = 'Coleta importada. Os dados são lidos somente nesta aba.';
+    render();
+  } catch (error) { byId('status').textContent = error.message; }
+  finally { event.target.value = ''; }
+});
+for (const id of ['search', 'category', 'filter']) byId(id).addEventListener('input', render);
+render();
+</script></html>
