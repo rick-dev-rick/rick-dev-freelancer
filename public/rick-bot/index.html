@@ -76,6 +76,16 @@ function render() {
 }
 const reportURL = 'https://api.github.com/repos/rick-dev-rick/RICK-BOT/contents/PAINEL.md?ref=radar-state';
 let active = null;
+const sessionKey = 'rick-bot:radar-session';
+function readKey() {
+  try { return sessionStorage.getItem(sessionKey); } catch { return null; }
+}
+function saveKey(key) {
+  try {
+    if (key) sessionStorage.setItem(sessionKey, key);
+    else sessionStorage.removeItem(sessionKey);
+  } catch {}
+}
 function showRows(next) {
   rows = next;
   const select = byId('category');
@@ -94,6 +104,7 @@ function disconnect(message = 'Radar desconectado.') {
     active.controller.abort();
   }
   active = null;
+  saveKey(null);
   byId('connect').hidden = false;
   byId('disconnect').hidden = true;
   byId('status').textContent = message;
@@ -113,6 +124,7 @@ async function sync(session) {
     if (!response.ok) throw new Error('Falha na consulta ao GitHub.');
     const next = parse(await response.text());
     if (active !== session) return;
+    saveKey(session.key);
     showRows(next);
     byId('status').textContent = 'Radar conectado · última sincronização às ' + new Date().toLocaleTimeString('pt-BR');
   } catch {
@@ -130,13 +142,18 @@ byId('connect').addEventListener('submit', event => {
     byId('status').textContent = 'Use uma chave de acesso granular do GitHub.';
     return;
   }
+  connect(key);
+});
+function connect(key) {
   active = { key, controller: new AbortController() };
   byId('connect').hidden = true;
   byId('disconnect').hidden = false;
   byId('status').textContent = 'Conectando ao radar…';
   void sync(active);
-});
+}
 byId('disconnect').addEventListener('click', () => disconnect());
 for (const id of ['search', 'category', 'filter']) byId(id).addEventListener('input', render);
 render();
+const savedKey = readKey();
+if (savedKey?.startsWith('github_pat_')) connect(savedKey);
 </script></html>
