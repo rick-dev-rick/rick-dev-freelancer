@@ -11,22 +11,28 @@ const links = [
 ];
 export default function Layout() {
   const [open, setOpen] = useState(false);
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   const previousPath = useRef(pathname);
   const menuButton = useRef(null);
   const mainContent = useRef(null);
   const briefDraft = useRef(null);
   useEffect(() => {
     setOpen(false);
-    if (previousPath.current !== pathname) {
-      mainContent.current?.focus({ preventScroll: true });
-      previousPath.current = pathname;
+    const destination = hash && document.getElementById(hash.slice(1));
+    if (destination && mainContent.current?.contains(destination)) {
+      destination.focus({ preventScroll: true });
+      destination.scrollIntoView();
+    } else {
+      if (previousPath.current !== pathname) mainContent.current?.focus({ preventScroll: true });
+      window.scrollTo(0, 0);
     }
-    window.scrollTo(0, 0);
+    previousPath.current = pathname;
     const name =
-      links.find(([url]) => url === pathname)?.[1] || "Página não encontrada";
+      pathname === "/projetos/nova-street"
+        ? "NØVA STREET"
+        : links.find(([url]) => url === pathname)?.[1] || "Página não encontrada";
     document.title = `${pathname === "/mensagens" ? "Minhas mensagens" : pathname === "/painel" ? "Painel do desenvolvedor" : name} | rick_dev — Desenvolvimento web`;
-  }, [pathname]);
+  }, [pathname, hash]);
   useEffect(() => {
     if (!open) return;
     const closeOnEscape = (event) => {

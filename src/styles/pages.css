@@ -452,3 +452,11 @@ details p {
 .brief-actions .button {
   white-space: normal;
 }
+
+.service-details h2[id] {
+  scroll-margin-top: 24px;
+}
+.service-details h2[id]:focus-visible {
+  outline: 3px solid #5988c9;
+  outline-offset: 4px;
+}

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Icon from "./Icon";
 import ProjectVisual from "./ProjectVisual";
 export default function ProjectCard({ project }) {
@@ -19,6 +20,9 @@ export default function ProjectCard({ project }) {
           ))}
         </ul>
         <div className="project-links">
+          {project.casePath && (
+            <Link to={project.casePath}>Ler o case <Icon /></Link>
+          )}
           {project.url && (
             <a href={project.url} target="_blank" rel="noreferrer">
               Ver projeto{" "}

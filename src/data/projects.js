@@ -15,6 +15,7 @@ export const projects = [
     url: "https://rick-dev-rick.github.io/nova-street/",
     repo: "https://github.com/rick-dev-rick/nova-street",
     kind: "demo",
+    casePath: "/projetos/nova-street",
   },
   {
     id: "os",

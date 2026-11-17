@@ -23,7 +23,7 @@ export default function Services() {
           <article key={s.number}>
             <span className="detail-number">{s.number}</span>
             <div>
-              <h2>{s.title}</h2>
+              <h2 id={`servico-${s.number}`} tabIndex={-1}>{s.title}</h2>
               <p>{s.text}</p>
               <small>{s.ideal}</small>
             </div>

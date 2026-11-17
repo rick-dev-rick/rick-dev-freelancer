@@ -385,3 +385,9 @@
     animation: none !important;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .button:hover {
+    transform: none;
+  }
+}
