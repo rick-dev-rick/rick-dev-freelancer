@@ -11,21 +11,28 @@ const links = [
 ];
 export default function Layout() {
   const [open, setOpen] = useState(false);
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   const previousPath = useRef(pathname);
   const menuButton = useRef(null);
   const mainContent = useRef(null);
+  const briefDraft = useRef(null);
   useEffect(() => {
     setOpen(false);
-    if (previousPath.current !== pathname) {
-      mainContent.current?.focus({ preventScroll: true });
-      previousPath.current = pathname;
+    const destination = hash && document.getElementById(hash.slice(1));
+    if (destination && mainContent.current?.contains(destination)) {
+      destination.focus({ preventScroll: true });
+      destination.scrollIntoView();
+    } else {
+      if (previousPath.current !== pathname) mainContent.current?.focus({ preventScroll: true });
+      window.scrollTo(0, 0);
     }
-    window.scrollTo(0, 0);
+    previousPath.current = pathname;
     const name =
-      links.find(([url]) => url === pathname)?.[1] || "Página não encontrada";
+      pathname === "/projetos/nova-street"
+        ? "NØVA STREET"
+        : links.find(([url]) => url === pathname)?.[1] || "Página não encontrada";
     document.title = `${pathname === "/mensagens" ? "Minhas mensagens" : pathname === "/painel" ? "Painel do desenvolvedor" : name} | rick_dev — Desenvolvimento web`;
-  }, [pathname]);
+  }, [pathname, hash]);
   useEffect(() => {
     if (!open) return;
     const closeOnEscape = (event) => {
@@ -44,7 +51,7 @@ export default function Layout() {
       </a>
       <header className="header">
         <div className="container header-inner">
-          <Link to="/" className="brand" aria-label="rick dev, início">
+          <Link to="/" className="brand">
             rick<span>_dev</span>
             <small>FREELANCER</small>
           </Link>
@@ -77,7 +84,7 @@ export default function Layout() {
         </div>
       </header>
       <main id="main" ref={mainContent} tabIndex="-1">
-        <Outlet />
+        <Outlet context={briefDraft} />
       </main>
       <footer>
         <div className="container footer-top">

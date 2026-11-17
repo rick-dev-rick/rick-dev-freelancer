@@ -23,7 +23,7 @@ export default function Services() {
           <article key={s.number}>
             <span className="detail-number">{s.number}</span>
             <div>
-              <h2>{s.title}</h2>
+              <h2 id={`servico-${s.number}`} tabIndex={-1}>{s.title}</h2>
               <p>{s.text}</p>
               <small>{s.ideal}</small>
             </div>
@@ -36,11 +36,13 @@ export default function Services() {
                   </li>
                 ))}
               </ul>
+              <p className="service-example"><strong>Exemplo de entrega.</strong> {s.example}</p>
               <Link
                 to={`/contato?servico=${encodeURIComponent(s.title)}`}
                 className="text-link"
+                aria-label={`Pedir orçamento para ${s.title}`}
               >
-                Conversar sobre essa solução <Icon />
+                Pedir orçamento <Icon />
               </Link>
             </div>
           </article>

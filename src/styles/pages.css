@@ -22,7 +22,7 @@
 }
 .detail-number {
   font-size: 12px;
-  color: #8190a1;
+  color: var(--muted);
 }
 .service-details h2 {
   font-size: 29px;
@@ -52,8 +52,13 @@
 .service-details li span {
   color: #536274;
 }
+.service-example {
+  border-inline-start: 2px solid var(--line);
+  padding-inline-start: var(--space-12);
+  margin-bottom: var(--space-16);
+}
 .scope-note {
-  padding: 40px;
+  padding: var(--space-40);
   border: 1px solid var(--line);
   background: var(--paper);
   border-radius: 5px;
@@ -71,11 +76,11 @@
 }
 .project-filters {
   display: flex;
-  gap: 10px;
+  gap: var(--space-10);
   align-items: center;
   border-bottom: 1px solid var(--line);
   padding-bottom: 25px;
-  margin-bottom: 40px;
+  margin-bottom: var(--space-40);
 }
 .project-filters button {
   background: none;
@@ -83,7 +88,7 @@
   padding: 11px 17px;
   border-radius: 25px;
   font-size: 11px;
-  color: #697687;
+  color: var(--muted);
 }
 .project-filters button[aria-pressed="true"] {
   background: var(--blue);
@@ -93,7 +98,7 @@
 .project-filters > span {
   margin-left: auto;
   font-size: 10px;
-  color: #6b7889;
+  color: var(--muted);
 }
 .project-list {
   display: flex;
@@ -106,7 +111,7 @@
   gap: 55px;
   align-items: center;
 }
-.project-info h3 {
+.project-info h2 {
   font-size: 30px;
   margin: 9px 0 13px;
 }
@@ -173,7 +178,7 @@
 .rafaela-preview p {
   font-size: 8px;
   line-height: 1.7;
-  color: #9b7880;
+  color: #784956;
 }
 .rafaela-preview b {
   display: inline-block;
@@ -227,7 +232,7 @@
   flex-direction: column;
   gap: 6px;
   font-size: 10px;
-  color: #6a7f99;
+  color: var(--muted);
 }
 .about-copy .eyebrow {
   margin-bottom: 15px;
@@ -278,10 +283,10 @@
 }
 .contact-note {
   display: flex;
-  gap: 16px;
+  gap: var(--space-16);
   border-top: 1px solid var(--line);
-  padding-top: 24px;
-  margin-top: 30px;
+  padding-top: var(--space-24);
+  margin-top: var(--space-30);
 }
 .contact-note > span {
   font-size: 25px;
@@ -305,13 +310,13 @@
 .field-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  gap: var(--space-18);
 }
 label {
   display: block;
   font-size: 11px;
   font-weight: 550;
-  margin-bottom: 22px;
+  margin-bottom: var(--space-field-stack);
   color: #455369;
 }
 label > span {
@@ -322,10 +327,10 @@ textarea,
 select {
   display: block;
   width: 100%;
-  margin-top: 10px;
+  margin-top: var(--space-10);
   border: 1px solid #ccd5df;
   border-radius: 4px;
-  padding: 14px;
+  padding: var(--space-field-inset);
   background: white;
   color: #28364a;
   font-size: 12px;
@@ -336,17 +341,17 @@ textarea {
 }
 input::placeholder,
 textarea::placeholder {
-  color: #8a95a1;
+  color: var(--muted);
 }
 select {
   min-height: 49px;
 }
 .privacy-note {
   display: block;
-  color: #768291;
+  color: var(--muted);
   font-size: 9px;
   line-height: 1.8;
-  margin-top: 16px;
+  margin-top: var(--space-16);
   max-width: 440px;
 }
 .form-status {
@@ -361,17 +366,44 @@ select {
   border-radius: 5px;
   background: #eff3f8;
 }
-.brief-result h3 {
+.brief-result h2 {
   font-size: 20px;
-  margin-bottom: 20px;
+  margin-bottom: var(--space-20);
+  scroll-margin-top: var(--space-16);
+}
+.brief-result h2:focus-visible {
+  outline: 3px solid #5988c9;
+  outline-offset: 4px;
+}
+.brief-field {
+  margin-bottom: var(--space-field-stack);
+}
+.brief-field label {
+  margin-bottom: 0;
+}
+.brief-field .field-error {
+  display: block;
+  margin-top: var(--space-6);
+  font-size: 11px;
+  font-weight: 550;
+  color: #953633;
+}
+[aria-invalid="true"] {
+  border-color: #953633;
 }
 .brief-result textarea {
   font-size: 11px;
   line-height: 1.8;
 }
+.brief-action-status {
+  margin-bottom: var(--space-8);
+}
+.brief-action-status:empty {
+  margin: 0;
+}
 .brief-actions {
   display: flex;
-  gap: 20px;
+  gap: var(--space-20);
   flex-wrap: wrap;
   align-items: center;
 }
@@ -380,7 +412,7 @@ select {
   background: none;
   color: var(--blue);
   font-size: 11px;
-  padding: 8px;
+  padding: var(--space-8);
 }
 .faq {
   max-width: 850px;
@@ -416,21 +448,16 @@ details p {
   max-width: 650px;
 }
 
-.contact-channels {
+.contact-quick-actions {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
-  margin-top: 28px;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-12) var(--space-20);
+  margin: var(--space-24) 0 var(--space-16);
 }
-.contact-address {
-  font-size: 12px;
-  color: var(--blue);
-  overflow-wrap: anywhere;
-  max-width: 100%;
-  line-height: 1.7;
-  text-decoration: underline;
-  text-underline-offset: 4px;
+.contact-quick-actions .text-link {
+  align-items: center;
+  min-height: 44px;
 }
 .footer-contacts {
   display: flex;
@@ -443,4 +470,12 @@ details p {
 }
 .brief-actions .button {
   white-space: normal;
+}
+
+.service-details h2[id] {
+  scroll-margin-top: 24px;
+}
+.service-details h2[id]:focus-visible {
+  outline: 3px solid #5988c9;
+  outline-offset: 4px;
 }

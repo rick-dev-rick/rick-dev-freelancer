@@ -10,9 +10,10 @@
   .button {
     min-height: 44px;
   }
-  .contact-address,
   .footer-contacts a,
-  .project-links a {
+  .footer-bottom a,
+  .project-links a,
+  .service-details .text-link {
     min-height: 44px;
     display: inline-flex;
     align-items: center;
@@ -45,7 +46,7 @@
     background: none;
     border: 1px solid #cad3dd;
     border-radius: 4px;
-    padding: 10px 13px;
+    padding: var(--space-10) 13px;
     color: var(--blue);
     font-size: 11px;
   }
@@ -57,17 +58,17 @@
     top: 80px;
     z-index: 10;
     background: #fafbf9;
-    padding: 20px;
+    padding: var(--space-20);
     border-bottom: 1px solid var(--line);
     box-shadow: 0 20px 30px -30px #234;
   }
   .nav.open {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: var(--space-6);
   }
   .nav a {
-    padding: 12px 7px;
+    padding: var(--space-12) 7px;
   }
   .nav a.active:after {
     right: auto;
@@ -79,11 +80,11 @@
   }
   .hero-grid {
     grid-template-columns: 1fr;
-    gap: 48px;
+    gap: var(--space-48);
   }
   .hero .eyebrow {
     font-size: 8px;
-    margin-bottom: 20px;
+    margin-bottom: var(--space-20);
   }
   .hero h1 {
     font-size: clamp(49px, 11vw, 71px);
@@ -95,12 +96,12 @@
     max-width: 400px;
   }
   .hero-actions {
-    gap: 22px;
+    gap: var(--space-22);
     margin-top: 25px;
   }
   .hero-actions .button {
     font-size: 11px;
-    padding: 16px 18px;
+    padding: var(--space-16) var(--space-18);
   }
   .hero-note {
     font-size: 9px;
@@ -133,9 +134,6 @@
   .value-strip .container > span {
     gap: 7px;
   }
-  .section {
-    padding: 58px 0;
-  }
   .section-heading {
     align-items: flex-start;
     flex-direction: column;
@@ -167,7 +165,7 @@
     padding: 25px;
   }
   .service-bottom {
-    margin-top: 24px;
+    margin-top: var(--space-24);
   }
   .featured-grid {
     grid-template-columns: 1fr;
@@ -232,11 +230,11 @@
   }
   .footer-bottom {
     flex-direction: column;
-    gap: 20px;
-    font-size: 9px;
+    gap: var(--space-12);
+    font-size: 12px;
   }
   .footer-bottom nav {
-    gap: 24px;
+    gap: 0 var(--space-16);
     flex-wrap: wrap;
   }
   .page-intro {
@@ -283,11 +281,11 @@
     margin-bottom: 28px;
   }
   .project-filters button {
-    font-size: 9px;
-    padding: 10px 12px;
+    font-size: 12px;
+    padding: var(--space-8) var(--space-10);
   }
   .project-filters > span {
-    font-size: 9px;
+    font-size: 11px;
     width: 100%;
     margin: 5px 0 0;
   }
@@ -295,7 +293,7 @@
     grid-template-columns: 1fr;
     gap: 24px;
   }
-  .project-info h3 {
+  .project-info h2 {
     font-size: 29px;
   }
   .project-info p {
@@ -339,7 +337,7 @@
   }
   .principles {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: var(--space-28);
   }
   .principles p {
     font-size: 12px;
@@ -355,10 +353,10 @@
     font-size: 12px;
   }
   .contact-note {
-    margin-top: 22px;
+    margin-top: var(--space-22);
   }
   .setup-note {
-    margin-top: 20px;
+    margin-top: var(--space-20);
   }
   .field-row {
     grid-template-columns: 1fr;
@@ -384,5 +382,11 @@
     scroll-behavior: auto !important;
     transition: none !important;
     animation: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button:hover {
+    transform: none;
   }
 }

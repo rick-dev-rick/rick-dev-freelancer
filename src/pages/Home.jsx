@@ -54,7 +54,7 @@ export default function Home() {
                 <b>NØVA STREET</b>
                 <small>E-commerce demonstrativo · React</small>
               </span>
-              <Link to="/projetos" aria-label="Conhecer o case NØVA STREET">
+              <Link to="/projetos/nova-street" aria-label="Conhecer o case NØVA STREET">
                 <Icon />
               </Link>
             </div>
@@ -107,7 +107,7 @@ export default function Home() {
           </div>
           <div className="service-grid">
             {services.map((s) => (
-              <Link className="service-card" key={s.number} to="/servicos">
+              <Link className="service-card" key={s.number} to={`/servicos#servico-${s.number}`}>
                 <span className="service-number">
                   {s.number}
                   <b>

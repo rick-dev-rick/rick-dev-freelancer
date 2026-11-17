@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Icon from "./Icon";
 import ProjectVisual from "./ProjectVisual";
 export default function ProjectCard({ project }) {
@@ -6,7 +7,7 @@ export default function ProjectCard({ project }) {
       <ProjectVisual project={project.id} />
       <div className="project-info">
         <span className="eyebrow">{project.type}</span>
-        <h3>{project.name}</h3>
+        <h2>{project.name}</h2>
         <p>{project.description}</p>
         <div className="tags">
           {project.tags.map((tag) => (
@@ -19,15 +20,28 @@ export default function ProjectCard({ project }) {
           ))}
         </ul>
         <div className="project-links">
+          {project.casePath && (
+            <Link to={project.casePath}>Ler o case <Icon /></Link>
+          )}
           {project.url && (
-            <a href={project.url} target="_blank" rel="noreferrer">
-              Ver projeto{" "}
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`${project.casePath ? "Ver demonstração" : "Ver projeto"} de ${project.name}`}
+            >
+              {project.casePath ? "Ver demonstração" : "Ver projeto"}{" "}
               <span aria-hidden="true">
                 <Icon />
               </span>
             </a>
           )}
-          <a href={project.repo} target="_blank" rel="noreferrer">
+          <a
+            href={project.repo}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`Código no GitHub de ${project.name}`}
+          >
             Código no GitHub{" "}
             <span aria-hidden="true">
               <Icon />

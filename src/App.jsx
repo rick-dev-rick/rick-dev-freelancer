@@ -4,6 +4,7 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Services from "./pages/Services";
 import Projects from "./pages/Projects";
+import NovaCase from "./pages/NovaCase";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Messages from "./pages/Messages";
@@ -15,6 +16,7 @@ export default function App() {
         <Route index element={<Home />} />
         <Route path="servicos" element={<Services />} />
         <Route path="projetos" element={<Projects />} />
+        <Route path="projetos/nova-street" element={<NovaCase />} />
         <Route path="sobre" element={<About />} />
         <Route path="contato" element={<Contact />} />
         <Route path="mensagens" element={<Messages />} />

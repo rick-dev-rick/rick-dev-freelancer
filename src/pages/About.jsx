@@ -51,6 +51,11 @@ export default function About() {
             de acordo com o projeto. O código é parte da entrega; clareza,
             navegação e cuidado visual também.
           </p>
+          <p>
+            No <Link to="/projetos/nova-street" className="text-link">case NØVA STREET</Link>,
+            por exemplo, busca e filtros ficam na URL para que a seleção do
+            catálogo possa ser compartilhada.
+          </p>
           <Link to="/projetos" className="text-link">
             Conheça meu trabalho na prática <Icon />
           </Link>

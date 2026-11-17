@@ -8,6 +8,14 @@ export function createBrief(values) {
     `Prazo desejado: ${values.deadline || "A combinar"}`,
   ].join("\n");
 }
+export function briefErrors(values) {
+  const errors = {};
+  if (!values.name?.trim()) errors.name = "Informe seu nome.";
+  if (!values.service) errors.service = "Escolha um serviço ou a opção de orientação.";
+  if (!values.goal?.trim()) errors.goal = "Descreva o objetivo do seu projeto.";
+  return errors;
+}
+
 export function validateBrief(values) {
-  return Boolean(values.name?.trim() && values.goal?.trim() && values.service);
+  return Object.keys(briefErrors(values)).length === 0;
 }

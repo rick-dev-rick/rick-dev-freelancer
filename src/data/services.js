@@ -9,6 +9,7 @@ export const services = [
       "Chamadas para contato e orçamento",
     ],
     ideal: "Para negócios que precisam de uma presença profissional.",
+    example: "Uma página de serviços com descrição do atendimento e link direto para pedir orçamento.",
   },
   {
     number: "02",
@@ -20,6 +21,7 @@ export const services = [
       "Direcionamento para o canal de atendimento",
     ],
     ideal: "Para apresentar uma oferta com clareza.",
+    example: "Uma página de campanha com benefícios, dúvidas frequentes e um caminho para falar com a empresa.",
   },
   {
     number: "03",
@@ -31,5 +33,6 @@ export const services = [
       "Integrações avaliadas no orçamento",
     ],
     ideal: "Para mostrar produtos ou explorar uma ideia digital.",
+    example: "Uma vitrine com filtros por categoria e uma página de detalhes para cada produto.",
   },
 ];
