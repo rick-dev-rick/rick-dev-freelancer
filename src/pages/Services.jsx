@@ -36,11 +36,13 @@ export default function Services() {
                   </li>
                 ))}
               </ul>
+              <p className="service-example"><strong>Exemplo de entrega.</strong> {s.example}</p>
               <Link
                 to={`/contato?servico=${encodeURIComponent(s.title)}`}
                 className="text-link"
+                aria-label={`Pedir orçamento para ${s.title}`}
               >
-                Conversar sobre essa solução <Icon />
+                Pedir orçamento <Icon />
               </Link>
             </div>
           </article>

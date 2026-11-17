@@ -52,6 +52,11 @@
 .service-details li span {
   color: #536274;
 }
+.service-example {
+  border-inline-start: 2px solid var(--line);
+  padding-inline-start: var(--space-12);
+  margin-bottom: var(--space-16);
+}
 .scope-note {
   padding: var(--space-40);
   border: 1px solid var(--line);
@@ -370,9 +375,17 @@ select {
   outline: 3px solid #5988c9;
   outline-offset: 4px;
 }
-label > .field-error {
+.brief-field {
+  margin-bottom: var(--space-field-stack);
+}
+.brief-field label {
+  margin-bottom: 0;
+}
+.brief-field .field-error {
   display: block;
-  margin-top: 6px;
+  margin-top: var(--space-6);
+  font-size: 11px;
+  font-weight: 550;
   color: #953633;
 }
 [aria-invalid="true"] {
@@ -381,6 +394,12 @@ label > .field-error {
 .brief-result textarea {
   font-size: 11px;
   line-height: 1.8;
+}
+.brief-action-status {
+  margin-bottom: var(--space-8);
+}
+.brief-action-status:empty {
+  margin: 0;
 }
 .brief-actions {
   display: flex;

@@ -5,7 +5,7 @@ export const projects = [
     type: "E-commerce demonstrativo",
     label: "Case em destaque",
     description:
-      "Uma loja streetwear com experiência de compra completa no front-end. Do catálogo ao checkout demonstrativo, com foco em navegação e clareza.",
+      "Uma vitrine streetwear que permite explorar a coleção por busca e filtros. O case explica como a navegação, a galeria e a sacola compõem a jornada demonstrativa.",
     tags: ["React", "Vite", "CSS", "Responsivo"],
     features: [
       "Catálogo com busca e filtros",
@@ -23,7 +23,7 @@ export const projects = [
     type: "Aplicação pessoal",
     label: "Organização & interface",
     description:
-      "Um painel pessoal que reúne organização e acesso a informações em uma interface própria, com login administrativo e visualização para convidados.",
+      "Um painel que reúne informações de organização pessoal em uma interface. O acesso administrativo e a visualização para convidados atendem a usos diferentes no mesmo painel.",
     tags: ["JavaScript", "Supabase", "Interface web"],
     features: [
       "Painel de organização pessoal",
@@ -39,7 +39,7 @@ export const projects = [
     type: "Site pessoal",
     label: "Experiência interativa",
     description:
-      "Um site feito para contar uma história de forma afetiva, com uma sequência de páginas e pequenas interações que conduzem a experiência.",
+      "Um site pessoal que conta uma história em capítulos. A navegação em sequência organiza a leitura e intercala mensagens com pequenas interações.",
     tags: ["HTML", "CSS", "JavaScript"],
     features: [
       "Navegação em múltiplas páginas",

@@ -28,6 +28,7 @@ function ContactPage({ location }) {
     saved?.prepared || returned ? createBrief(values) : "",
   );
   const [status, setStatus] = useState("");
+  const [actionStatus, setActionStatus] = useState("");
   const [errors, setErrors] = useState({});
   const [invalidField, setInvalidField] = useState(null);
   const summaryHeading = useRef(null);
@@ -51,6 +52,7 @@ function ContactPage({ location }) {
     setErrors({ ...errors, [name]: undefined });
     setBrief("");
     setStatus("");
+    setActionStatus("");
   };
   function submit(e) {
     e.preventDefault();
@@ -72,9 +74,9 @@ function ContactPage({ location }) {
   async function copy() {
     try {
       await navigator.clipboard.writeText(brief);
-      setStatus("Resumo copiado. Nenhuma mensagem foi enviada.");
+      setActionStatus("Resumo copiado. Nenhuma mensagem foi enviada.");
     } catch {
-      setStatus(
+      setActionStatus(
         "A cópia automática não está disponível. Selecione o texto do resumo e copie manualmente.",
       );
     }
@@ -88,7 +90,7 @@ function ContactPage({ location }) {
     a.download = "meu-projeto-rick-dev.txt";
     a.click();
     URL.revokeObjectURL(url);
-    setStatus("Resumo baixado. Nenhuma mensagem foi enviada.");
+    setActionStatus("Resumo baixado. Nenhuma mensagem foi enviada.");
   }
   return (
     <>
@@ -142,10 +144,11 @@ function ContactPage({ location }) {
         </aside>
         <form ref={form} noValidate onSubmit={submit}>
           <div className="field-row">
-            <label>
-              Seu nome <span>*</span>
+            <div className="brief-field">
+              <label htmlFor="brief-name">Seu nome <span aria-hidden="true">*</span></label>
               <input
                 autoComplete="name"
+                id="brief-name"
                 name="name"
                 value={values.name}
                 onChange={update}
@@ -156,7 +159,7 @@ function ContactPage({ location }) {
                 aria-describedby={errors.name ? "brief-name-error" : undefined}
               />
               {errors.name && <span className="field-error" id="brief-name-error">{errors.name}</span>}
-            </label>
+            </div>
             <label>
               Nome do negócio
               <input
@@ -169,9 +172,10 @@ function ContactPage({ location }) {
               />
             </label>
           </div>
-          <label>
-            O que você procura? <span>*</span>
+          <div className="brief-field">
+            <label htmlFor="brief-service">O que você procura? <span aria-hidden="true">*</span></label>
             <select
+              id="brief-service"
               name="service"
               required
               value={values.service}
@@ -186,10 +190,11 @@ function ContactPage({ location }) {
               <option>Ainda preciso de orientação</option>
             </select>
             {errors.service && <span className="field-error" id="brief-service-error">{errors.service}</span>}
-          </label>
-          <label>
-            O que seu site precisa fazer? <span>*</span>
+          </div>
+          <div className="brief-field">
+            <label htmlFor="brief-goal">O que seu site precisa fazer? <span aria-hidden="true">*</span></label>
             <textarea
+              id="brief-goal"
               name="goal"
               required
               value={values.goal}
@@ -201,7 +206,7 @@ function ContactPage({ location }) {
               aria-describedby={errors.goal ? "brief-goal-error" : undefined}
             />
             {errors.goal && <span className="field-error" id="brief-goal-error">{errors.goal}</span>}
-          </label>
+          </div>
           <label>
             Tem algum prazo em mente?
             <input
@@ -266,6 +271,7 @@ function ContactPage({ location }) {
                   <span>Continue pelo seu aplicativo de e-mail.</span>
                 </a>
               </div>
+              <p role="status" className="form-status brief-action-status">{actionStatus}</p>
               <div className="brief-actions">
                 <button type="button" className="text-button" onClick={copy}>
                   Copiar resumo <Icon />

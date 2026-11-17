@@ -22,12 +22,13 @@ export default function Projects() {
       <section className="container projects-section">
         <div className="project-filters" aria-label="Filtrar projetos">
           {[
-            ["all", "Todos os projetos"],
+            ["all", "Todos", "Todos os projetos"],
             ["demo", "Demonstrativos"],
             ["personal", "Pessoais"],
-          ].map(([key, label]) => (
+          ].map(([key, label, accessibleName]) => (
             <button
               key={key}
+              aria-label={accessibleName}
               aria-pressed={filter === key}
               onClick={() => setFilter(key)}
             >

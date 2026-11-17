@@ -24,14 +24,24 @@ export default function ProjectCard({ project }) {
             <Link to={project.casePath}>Ler o case <Icon /></Link>
           )}
           {project.url && (
-            <a href={project.url} target="_blank" rel="noreferrer">
-              Ver projeto{" "}
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`${project.casePath ? "Ver demonstração" : "Ver projeto"} de ${project.name}`}
+            >
+              {project.casePath ? "Ver demonstração" : "Ver projeto"}{" "}
               <span aria-hidden="true">
                 <Icon />
               </span>
             </a>
           )}
-          <a href={project.repo} target="_blank" rel="noreferrer">
+          <a
+            href={project.repo}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`Código no GitHub de ${project.name}`}
+          >
             Código no GitHub{" "}
             <span aria-hidden="true">
               <Icon />

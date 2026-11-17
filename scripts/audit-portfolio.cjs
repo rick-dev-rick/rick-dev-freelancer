@@ -202,6 +202,41 @@ const server = createServer(async (req, res) => {
       assert.equal(await menu.getAttribute('aria-expanded'), 'false');
       assert.ok(await menu.evaluate(el => el === document.activeElement));
       flows.mobileMenuEscape = true;
+      const footerTargets = await page.locator('.footer-bottom a').evaluateAll(links =>
+        links.map(link => link.getBoundingClientRect().height),
+      );
+      assert.ok(footerTargets.every(height => height >= 44));
+      await go('projetos');
+      const filterRows = await page.locator('.project-filters button').evaluateAll(buttons =>
+        new Set(buttons.map(button => Math.round(button.getBoundingClientRect().top))).size,
+      );
+      assert.equal(filterRows, 1);
+      await go('contato');
+      const nameField = page.locator('[name=name]');
+      await nameField.fill('');
+      await prepare().press('Enter');
+      assert.equal(await page.getByRole('textbox', { name: 'Seu nome', exact: true }).count(), 1);
+      assert.equal(await nameField.getAttribute('aria-describedby'), 'brief-name-error');
+      for (const [key, value] of Object.entries(draft)) {
+        const field = page.locator('[name=' + key + ']');
+        if (key === 'service') await field.selectOption(value);
+        else await field.fill(value);
+      }
+      await prepare().press('Enter');
+      await page.evaluate(() => {
+        Object.defineProperty(navigator, 'clipboard', {
+          configurable: true,
+          value: { writeText: async () => { throw new Error('clipboard unavailable'); } },
+        });
+      });
+      await page.getByRole('button', { name: 'Copiar resumo' }).press('Enter');
+      const copyStatus = page.locator('.brief-result [role=status]');
+      assert.match(await copyStatus.innerText(), /copie manualmente/);
+      assert.ok(await copyStatus.evaluate(el => {
+        const rect = el.getBoundingClientRect();
+        return rect.top >= 0 && rect.bottom <= innerHeight;
+      }));
+      flows.contextualBriefFeedback = true;
       assert.equal(errors.length, 0);
       assert.equal(resources.length, 0);
       if (axe) assert.equal(findings.flatMap(r => r.axe || []).length, 0);

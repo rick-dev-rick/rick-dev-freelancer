@@ -11,7 +11,9 @@
     min-height: 44px;
   }
   .footer-contacts a,
-  .project-links a {
+  .footer-bottom a,
+  .project-links a,
+  .service-details .text-link {
     min-height: 44px;
     display: inline-flex;
     align-items: center;
@@ -228,11 +230,11 @@
   }
   .footer-bottom {
     flex-direction: column;
-    gap: 20px;
-    font-size: 9px;
+    gap: var(--space-12);
+    font-size: 12px;
   }
   .footer-bottom nav {
-    gap: 24px;
+    gap: 0 var(--space-16);
     flex-wrap: wrap;
   }
   .page-intro {
@@ -279,11 +281,11 @@
     margin-bottom: 28px;
   }
   .project-filters button {
-    font-size: 9px;
-    padding: 10px 12px;
+    font-size: 12px;
+    padding: var(--space-8) var(--space-10);
   }
   .project-filters > span {
-    font-size: 9px;
+    font-size: 11px;
     width: 100%;
     margin: 5px 0 0;
   }
