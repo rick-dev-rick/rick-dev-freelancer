@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import {
   mailbox,
   newAccessCode,
@@ -13,7 +13,11 @@ import AccessCode from "../components/AccessCode";
 export default function Messages() {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const values = state?.values;
+  const draft = useOutletContext();
+  const saved = state?.contactKey && draft.current?.key === state.contactKey
+    ? draft.current
+    : null;
+  const values = saved ? (saved.prepared ? saved.values : null) : state?.values;
   const [code, setCode] = useState(() => pendingCode() || savedCode());
   const [typed, setTyped] = useState("");
   const [data, setData] = useState(null);
@@ -49,6 +53,7 @@ export default function Messages() {
     pendingCode(pending.current);
     try {
       const result = await mailbox("create", { code: pending.current, values });
+      if (draft.current?.key === state?.contactKey) draft.current = null;
       setCode(pending.current);
       saveCode(pending.current);
       pendingCode("");
@@ -59,6 +64,16 @@ export default function Messages() {
     } finally {
       setBusy(false);
     }
+  }
+  function editBrief() {
+    if (saved) {
+      navigate(-1);
+      return;
+    }
+    navigate(
+      { pathname: "/contato", search: state?.contactSearch || "" },
+      { replace: true, state: { returnedBrief: values } },
+    );
   }
   function leave() {
     saveCode("");
@@ -115,9 +130,14 @@ export default function Messages() {
                     Quero enviar este pedido e acompanhar a conversa pelo site.
                   </span>
                 </label>
-                <button className="button" disabled={busy || !consent}>
-                  {busy ? "Enviando seu pedido…" : "Enviar pedido pelo site"}
-                </button>
+                <div className="site-send-actions">
+                  <button className="button" disabled={busy || !consent}>
+                    {busy ? "Enviando seu pedido…" : "Enviar pedido pelo site"}
+                  </button>
+                  <button className="outline-button" type="button" onClick={editBrief} disabled={busy}>
+                    Editar briefing
+                  </button>
+                </div>
                 <p>
                   Após o envio, guarde seu código privado para acompanhar as
                   respostas. Não há notificações por e-mail.

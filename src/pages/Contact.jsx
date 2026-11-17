@@ -1,38 +1,73 @@
 import Icon from "../components/Icon";
-import { useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import { createBrief, validateBrief } from "../lib/brief";
-import { contact, whatsappUrl, emailUrl } from "../lib/contact";
+import { useEffect, useRef, useState } from "react";
+import { Link, useLocation, useOutletContext } from "react-router-dom";
+import { createBrief, briefErrors } from "../lib/brief";
+import { whatsappUrl, emailUrl } from "../lib/contact";
 import { services } from "../data/services";
 export default function Contact() {
-  const [params] = useSearchParams();
+  const location = useLocation();
+  return <ContactPage key={location.key + location.search} location={location} />;
+}
+
+function ContactPage({ location }) {
+  const draft = useOutletContext();
+  const saved = draft.current?.key === location.key ? draft.current : null;
+  const returned = location.state?.returnedBrief;
+  const params = new URLSearchParams(location.search);
   const prefill = services.some((s) => s.title === params.get("servico"))
     ? params.get("servico")
     : "";
-  const [values, setValues] = useState({
+  const [values, setValues] = useState(saved?.values || returned || {
     name: "",
     business: "",
     service: prefill,
     goal: "",
     deadline: "",
   });
-  const [brief, setBrief] = useState("");
+  const [brief, setBrief] = useState(() =>
+    saved?.prepared || returned ? createBrief(values) : "",
+  );
   const [status, setStatus] = useState("");
+  const [errors, setErrors] = useState({});
+  const [invalidField, setInvalidField] = useState(null);
+  const summaryHeading = useRef(null);
+  const form = useRef(null);
+
+  useEffect(() => {
+    if (invalidField) form.current.elements.namedItem(invalidField.name)?.focus();
+  }, [invalidField]);
+
+  useEffect(() => {
+    if (brief && status === "Resumo preparado.") summaryHeading.current?.focus();
+  }, [brief, status]);
+
   const update = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    const next = { ...values, [name]: value };
+    setValues(next);
+    if (draft.current?.key === location.key) {
+      draft.current = { key: location.key, values: next, prepared: false };
+    }
+    setErrors({ ...errors, [name]: undefined });
     setBrief("");
     setStatus("");
   };
   function submit(e) {
     e.preventDefault();
-    if (!validateBrief(values)) {
-      const field = !values.name.trim() ? "name" : "goal";
-      setStatus("Preencha seu nome e o objetivo com texto válido.");
-      e.currentTarget.elements.namedItem(field).focus();
+    const nextErrors = briefErrors(values);
+    const first = Object.keys(nextErrors)[0];
+    setErrors(nextErrors);
+    if (first) {
+      setInvalidField({ name: first });
       return;
     }
-    setBrief(createBrief(values));
-    setStatus("Resumo preparado. Revise e escolha como compartilhar.");
+    const next = createBrief(values);
+    if (brief === next) summaryHeading.current?.focus();
+    setBrief(next);
+    setStatus("Resumo preparado.");
+  }
+  function saveDraft() {
+    draft.current = { key: location.key, values, prepared: true };
   }
   async function copy() {
     try {
@@ -70,6 +105,12 @@ export default function Contact() {
           Conte um pouco sobre o que você precisa. Não é necessário chegar com
           tudo definido: um objetivo já é um bom começo.
         </p>
+        <div className="contact-quick-actions">
+          <a className="button" href={whatsappUrl()} target="_blank" rel="noreferrer">
+            Conversar no WhatsApp <Icon />
+          </a>
+          <a href={emailUrl()} className="text-link">Enviar e-mail <Icon /></a>
+        </div>
         <Link className="text-link" to="/mensagens">
           Já enviou um pedido? Acompanhar minhas mensagens
         </Link>
@@ -98,29 +139,8 @@ export default function Contact() {
               </p>
             </div>
           </div>
-          <div className="contact-channels">
-            <a
-              className="button"
-              href={whatsappUrl()}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Conversar no WhatsApp <Icon />
-            </a>
-            <a
-              href={whatsappUrl()}
-              target="_blank"
-              rel="noreferrer"
-              className="contact-address"
-            >
-              {contact.phoneLabel}
-            </a>
-            <a href={emailUrl()} className="contact-address">
-              {contact.email} <Icon />
-            </a>
-          </div>
         </aside>
-        <form onSubmit={submit}>
+        <form ref={form} noValidate onSubmit={submit}>
           <div className="field-row">
             <label>
               Seu nome <span>*</span>
@@ -132,7 +152,10 @@ export default function Contact() {
                 required
                 maxLength={100}
                 placeholder="Como posso chamar você?"
+                aria-invalid={errors.name ? true : undefined}
+                aria-describedby={errors.name ? "brief-name-error" : undefined}
               />
+              {errors.name && <span className="field-error" id="brief-name-error">{errors.name}</span>}
             </label>
             <label>
               Nome do negócio
@@ -153,6 +176,8 @@ export default function Contact() {
               required
               value={values.service}
               onChange={update}
+              aria-invalid={errors.service ? true : undefined}
+              aria-describedby={errors.service ? "brief-service-error" : undefined}
             >
               <option value="">Selecione uma opção</option>
               {services.map((s) => (
@@ -160,6 +185,7 @@ export default function Contact() {
               ))}
               <option>Ainda preciso de orientação</option>
             </select>
+            {errors.service && <span className="field-error" id="brief-service-error">{errors.service}</span>}
           </label>
           <label>
             O que seu site precisa fazer? <span>*</span>
@@ -171,7 +197,10 @@ export default function Contact() {
               maxLength={3000}
               rows={5}
               placeholder="Apresentar meus serviços, mostrar meus produtos, divulgar uma campanha…"
+              aria-invalid={errors.goal ? true : undefined}
+              aria-describedby={errors.goal ? "brief-goal-error" : undefined}
             />
+            {errors.goal && <span className="field-error" id="brief-goal-error">{errors.goal}</span>}
           </label>
           <label>
             Tem algum prazo em mente?
@@ -190,24 +219,24 @@ export default function Contact() {
             </span>
           </button>
           <small className="privacy-note">
-            * Campos obrigatórios. O formulário não armazena nem envia dados. Ao
-            abrir WhatsApp ou e-mail, o resumo é compartilhado com o aplicativo
-            escolhido; você confirma o envio nele.
+            * Campos obrigatórios. Preparar o resumo não envia dados. Você
+            escolhe o canal e confirma o envio.
           </small>
           <p role="status" className="form-status">
             {status}
           </p>
           {brief && (
             <section className="brief-result">
-              <h3>Seu projeto, em poucas palavras.</h3>
+              <h2 ref={summaryHeading} tabIndex={-1}>Seu projeto, em poucas palavras.</h2>
               <label htmlFor="brief-text">Resumo para compartilhar</label>
               <textarea id="brief-text" value={brief} readOnly rows={10} />
-              <h4 className="channel-title">Como você prefere continuar?</h4>
+              <h3 className="channel-title">Como você prefere continuar?</h3>
               <div className="channel-options">
                 <Link
                   className="channel-option"
                   to="/mensagens"
-                  state={{ values }}
+                  onClick={saveDraft}
+                  state={{ values, contactKey: location.key, contactSearch: location.search }}
                 >
                   <b>
                     Caixa de mensagens do site <Icon />

@@ -6,7 +6,7 @@ export default function ProjectCard({ project }) {
       <ProjectVisual project={project.id} />
       <div className="project-info">
         <span className="eyebrow">{project.type}</span>
-        <h3>{project.name}</h3>
+        <h2>{project.name}</h2>
         <p>{project.description}</p>
         <div className="tags">
           {project.tags.map((tag) => (

@@ -22,7 +22,7 @@
 }
 .detail-number {
   font-size: 12px;
-  color: #8190a1;
+  color: var(--muted);
 }
 .service-details h2 {
   font-size: 29px;
@@ -83,7 +83,7 @@
   padding: 11px 17px;
   border-radius: 25px;
   font-size: 11px;
-  color: #697687;
+  color: var(--muted);
 }
 .project-filters button[aria-pressed="true"] {
   background: var(--blue);
@@ -93,7 +93,7 @@
 .project-filters > span {
   margin-left: auto;
   font-size: 10px;
-  color: #6b7889;
+  color: var(--muted);
 }
 .project-list {
   display: flex;
@@ -106,7 +106,7 @@
   gap: 55px;
   align-items: center;
 }
-.project-info h3 {
+.project-info h2 {
   font-size: 30px;
   margin: 9px 0 13px;
 }
@@ -173,7 +173,7 @@
 .rafaela-preview p {
   font-size: 8px;
   line-height: 1.7;
-  color: #9b7880;
+  color: #784956;
 }
 .rafaela-preview b {
   display: inline-block;
@@ -227,7 +227,7 @@
   flex-direction: column;
   gap: 6px;
   font-size: 10px;
-  color: #6a7f99;
+  color: var(--muted);
 }
 .about-copy .eyebrow {
   margin-bottom: 15px;
@@ -336,14 +336,14 @@ textarea {
 }
 input::placeholder,
 textarea::placeholder {
-  color: #8a95a1;
+  color: var(--muted);
 }
 select {
   min-height: 49px;
 }
 .privacy-note {
   display: block;
-  color: #768291;
+  color: var(--muted);
   font-size: 9px;
   line-height: 1.8;
   margin-top: 16px;
@@ -361,9 +361,22 @@ select {
   border-radius: 5px;
   background: #eff3f8;
 }
-.brief-result h3 {
+.brief-result h2 {
   font-size: 20px;
   margin-bottom: 20px;
+  scroll-margin-top: 16px;
+}
+.brief-result h2:focus-visible {
+  outline: 3px solid #5988c9;
+  outline-offset: 4px;
+}
+label > .field-error {
+  display: block;
+  margin-top: 6px;
+  color: #953633;
+}
+[aria-invalid="true"] {
+  border-color: #953633;
 }
 .brief-result textarea {
   font-size: 11px;
@@ -416,21 +429,16 @@ details p {
   max-width: 650px;
 }
 
-.contact-channels {
+.contact-quick-actions {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
-  margin-top: 28px;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin: 24px 0 16px;
 }
-.contact-address {
-  font-size: 12px;
-  color: var(--blue);
-  overflow-wrap: anywhere;
-  max-width: 100%;
-  line-height: 1.7;
-  text-decoration: underline;
-  text-underline-offset: 4px;
+.contact-quick-actions .text-link {
+  align-items: center;
+  min-height: 44px;
 }
 .footer-contacts {
   display: flex;

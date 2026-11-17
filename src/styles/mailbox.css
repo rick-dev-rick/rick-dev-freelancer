@@ -97,7 +97,10 @@
 .site-send .consent span {
   color: #455369;
 }
-.site-send > .button {
+.site-send-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
   margin-bottom: 15px;
 }
 .recover-conversation p {

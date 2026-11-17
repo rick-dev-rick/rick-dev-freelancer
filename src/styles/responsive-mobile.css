@@ -10,7 +10,6 @@
   .button {
     min-height: 44px;
   }
-  .contact-address,
   .footer-contacts a,
   .project-links a {
     min-height: 44px;
@@ -295,7 +294,7 @@
     grid-template-columns: 1fr;
     gap: 24px;
   }
-  .project-info h3 {
+  .project-info h2 {
     font-size: 29px;
   }
   .project-info p {

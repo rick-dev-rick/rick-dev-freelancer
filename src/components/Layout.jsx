@@ -15,6 +15,7 @@ export default function Layout() {
   const previousPath = useRef(pathname);
   const menuButton = useRef(null);
   const mainContent = useRef(null);
+  const briefDraft = useRef(null);
   useEffect(() => {
     setOpen(false);
     if (previousPath.current !== pathname) {
@@ -44,7 +45,7 @@ export default function Layout() {
       </a>
       <header className="header">
         <div className="container header-inner">
-          <Link to="/" className="brand" aria-label="rick dev, início">
+          <Link to="/" className="brand">
             rick<span>_dev</span>
             <small>FREELANCER</small>
           </Link>
@@ -77,7 +78,7 @@ export default function Layout() {
         </div>
       </header>
       <main id="main" ref={mainContent} tabIndex="-1">
-        <Outlet />
+        <Outlet context={briefDraft} />
       </main>
       <footer>
         <div className="container footer-top">
