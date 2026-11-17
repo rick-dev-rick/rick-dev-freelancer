@@ -37,4 +37,5 @@ O painel filtra Em atendimento, Finalizadas e Todas. Somente o proprietário aut
 ## Interface e qualidade
 
 - [Design System e catálogo de componentes](docs/design-system.md)
+- [Validação técnica e matriz Freelancer 2.1](docs/qa-freelancer-2.1.md)
 - [Auditoria comparativa Freelancer 2.0](docs/auditoria-freelancer-2.md)
