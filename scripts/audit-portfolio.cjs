@@ -164,7 +164,7 @@ const server = createServer(async (req, res) => {
       flows.editAndValidation = true;
       await page.emulateMedia({ reducedMotion: 'reduce' });
       await go('projetos/nova-street', 'NØVA STREET');
-      const reduced = await page.locator('.case-cover').evaluate(el => getComputedStyle(el).animationName);
+      const reduced = await page.locator('.case-cover img').evaluate(el => getComputedStyle(el).animationName);
       assert.equal(reduced, 'none');
       const demoAction = page.getByRole('link', { name: 'Abrir demonstração' });
       await demoAction.hover();
@@ -174,15 +174,19 @@ const server = createServer(async (req, res) => {
       await go('projetos');
       await page.getByRole('link', { name: 'Ler o case' }).press('Enter');
       await page.locator('.case-cover').waitFor();
-      const motion = await page.locator('.case-cover').evaluate(async el => {
+      const motion = await page.locator('.case-cover img').evaluate(async el => {
         const style = getComputedStyle(el);
+        const captionOpacity = getComputedStyle(el.parentElement.querySelector('figcaption')).opacity;
+        const figureOpacity = getComputedStyle(el.parentElement).opacity;
         const animation = el.getAnimations()[0];
         const duration = animation?.effect.getTiming().duration;
         if (animation) await animation.finished;
-        return { name: style.animationName, duration, endTransform: getComputedStyle(el).transform };
+        return { name: style.animationName, duration, captionOpacity, figureOpacity, endTransform: getComputedStyle(el).transform };
       });
       assert.equal(motion.name, 'case-cover-enter');
       assert.equal(motion.duration, 240);
+      assert.equal(motion.captionOpacity, '1');
+      assert.equal(motion.figureOpacity, '1');
       assert.equal(motion.endTransform, 'none');
       flows.motion = { normal: motion, reduced, reducedHover };
       await go('');

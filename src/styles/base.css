@@ -121,7 +121,7 @@ p {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 30px;
+  gap: var(--space-30);
 }
 .brand {
   font-family: Manrope, Arial, sans-serif;
@@ -140,18 +140,18 @@ p {
     9px "DM Sans",
     Arial;
   letter-spacing: 3.5px;
-  margin-top: 8px;
+  margin-top: var(--space-8);
   color: #68737f;
 }
 .nav {
   display: flex;
-  gap: 28px;
+  gap: var(--space-28);
   font-size: 13px;
 }
 .nav a {
   color: #65707c;
   position: relative;
-  padding-block: 12px;
+  padding-block: var(--space-12);
 }
 .nav a:hover,
 .nav a.active {

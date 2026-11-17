@@ -44,7 +44,7 @@
     background: none;
     border: 1px solid #cad3dd;
     border-radius: 4px;
-    padding: 10px 13px;
+    padding: var(--space-10) 13px;
     color: var(--blue);
     font-size: 11px;
   }
@@ -56,17 +56,17 @@
     top: 80px;
     z-index: 10;
     background: #fafbf9;
-    padding: 20px;
+    padding: var(--space-20);
     border-bottom: 1px solid var(--line);
     box-shadow: 0 20px 30px -30px #234;
   }
   .nav.open {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: var(--space-6);
   }
   .nav a {
-    padding: 12px 7px;
+    padding: var(--space-12) 7px;
   }
   .nav a.active:after {
     right: auto;
@@ -78,11 +78,11 @@
   }
   .hero-grid {
     grid-template-columns: 1fr;
-    gap: 48px;
+    gap: var(--space-48);
   }
   .hero .eyebrow {
     font-size: 8px;
-    margin-bottom: 20px;
+    margin-bottom: var(--space-20);
   }
   .hero h1 {
     font-size: clamp(49px, 11vw, 71px);
@@ -94,12 +94,12 @@
     max-width: 400px;
   }
   .hero-actions {
-    gap: 22px;
+    gap: var(--space-22);
     margin-top: 25px;
   }
   .hero-actions .button {
     font-size: 11px;
-    padding: 16px 18px;
+    padding: var(--space-16) var(--space-18);
   }
   .hero-note {
     font-size: 9px;
@@ -132,9 +132,6 @@
   .value-strip .container > span {
     gap: 7px;
   }
-  .section {
-    padding: 58px 0;
-  }
   .section-heading {
     align-items: flex-start;
     flex-direction: column;
@@ -166,7 +163,7 @@
     padding: 25px;
   }
   .service-bottom {
-    margin-top: 24px;
+    margin-top: var(--space-24);
   }
   .featured-grid {
     grid-template-columns: 1fr;
@@ -338,7 +335,7 @@
   }
   .principles {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: var(--space-28);
   }
   .principles p {
     font-size: 12px;
@@ -354,10 +351,10 @@
     font-size: 12px;
   }
   .contact-note {
-    margin-top: 22px;
+    margin-top: var(--space-22);
   }
   .setup-note {
-    margin-top: 20px;
+    margin-top: var(--space-20);
   }
   .field-row {
     grid-template-columns: 1fr;

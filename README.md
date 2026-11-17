@@ -33,3 +33,8 @@ Os previews dos projetos são ilustrações em CSS. Links levam aos projetos ou 
 
 ## Status de atendimento
 O painel filtra Em atendimento, Finalizadas e Todas. Somente o proprietário autenticado pode finalizar/reabrir. O status e a data de conclusão ficam no banco, sem alterar o histórico. Uma nova mensagem reabre a conversa; retry idempotente de mensagem antiga não reabre. A migração adicional está em `backend/mailbox-status.sql`.
+
+## Interface e qualidade
+
+- [Design System e catálogo de componentes](docs/design-system.md)
+- [Auditoria comparativa Freelancer 2.0](docs/auditoria-freelancer-2.md)

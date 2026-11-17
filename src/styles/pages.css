@@ -53,7 +53,7 @@
   color: #536274;
 }
 .scope-note {
-  padding: 40px;
+  padding: var(--space-40);
   border: 1px solid var(--line);
   background: var(--paper);
   border-radius: 5px;
@@ -71,11 +71,11 @@
 }
 .project-filters {
   display: flex;
-  gap: 10px;
+  gap: var(--space-10);
   align-items: center;
   border-bottom: 1px solid var(--line);
   padding-bottom: 25px;
-  margin-bottom: 40px;
+  margin-bottom: var(--space-40);
 }
 .project-filters button {
   background: none;
@@ -278,10 +278,10 @@
 }
 .contact-note {
   display: flex;
-  gap: 16px;
+  gap: var(--space-16);
   border-top: 1px solid var(--line);
-  padding-top: 24px;
-  margin-top: 30px;
+  padding-top: var(--space-24);
+  margin-top: var(--space-30);
 }
 .contact-note > span {
   font-size: 25px;
@@ -305,13 +305,13 @@
 .field-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  gap: var(--space-18);
 }
 label {
   display: block;
   font-size: 11px;
   font-weight: 550;
-  margin-bottom: 22px;
+  margin-bottom: var(--space-field-stack);
   color: #455369;
 }
 label > span {
@@ -322,10 +322,10 @@ textarea,
 select {
   display: block;
   width: 100%;
-  margin-top: 10px;
+  margin-top: var(--space-10);
   border: 1px solid #ccd5df;
   border-radius: 4px;
-  padding: 14px;
+  padding: var(--space-field-inset);
   background: white;
   color: #28364a;
   font-size: 12px;
@@ -346,7 +346,7 @@ select {
   color: var(--muted);
   font-size: 9px;
   line-height: 1.8;
-  margin-top: 16px;
+  margin-top: var(--space-16);
   max-width: 440px;
 }
 .form-status {
@@ -363,8 +363,8 @@ select {
 }
 .brief-result h2 {
   font-size: 20px;
-  margin-bottom: 20px;
-  scroll-margin-top: 16px;
+  margin-bottom: var(--space-20);
+  scroll-margin-top: var(--space-16);
 }
 .brief-result h2:focus-visible {
   outline: 3px solid #5988c9;
@@ -384,7 +384,7 @@ label > .field-error {
 }
 .brief-actions {
   display: flex;
-  gap: 20px;
+  gap: var(--space-20);
   flex-wrap: wrap;
   align-items: center;
 }
@@ -393,7 +393,7 @@ label > .field-error {
   background: none;
   color: var(--blue);
   font-size: 11px;
-  padding: 8px;
+  padding: var(--space-8);
 }
 .faq {
   max-width: 850px;
@@ -433,8 +433,8 @@ details p {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 12px 20px;
-  margin: 24px 0 16px;
+  gap: var(--space-12) var(--space-20);
+  margin: var(--space-24) 0 var(--space-16);
 }
 .contact-quick-actions .text-link {
   align-items: center;

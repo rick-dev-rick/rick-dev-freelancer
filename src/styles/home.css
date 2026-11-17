@@ -13,7 +13,7 @@
   display: flex;
   align-items: center;
   gap: 9px;
-  margin-bottom: 24px;
+  margin-bottom: var(--space-24);
 }
 .status-dot {
   height: 6px;
@@ -22,7 +22,7 @@
   background: var(--blue);
 }
 .hero h1 {
-  margin-bottom: 24px;
+  margin-bottom: var(--space-24);
 }
 .hero-copy > p {
   font-size: 15px;
@@ -32,15 +32,15 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 22px;
-  margin-top: 30px;
+  gap: var(--space-22);
+  margin-top: var(--space-30);
 }
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  padding: 17px 22px;
+  gap: var(--space-action-gap);
+  padding: 17px var(--space-action-inline);
   border: 1px solid var(--blue);
   border-radius: 4px;
   background: var(--blue);
@@ -59,7 +59,7 @@
 .text-link {
   font-size: 12px;
   display: inline-flex;
-  gap: 20px;
+  gap: var(--space-20);
   color: var(--blue);
   font-weight: 600;
   line-height: 1.6;
@@ -319,14 +319,14 @@
   color: var(--blue);
 }
 .section {
-  padding: 90px 0;
+  padding: var(--space-section-block) 0;
 }
 .section-heading {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 30px;
-  margin-bottom: 40px;
+  gap: var(--space-30);
+  margin-bottom: var(--space-40);
 }
 .section-heading .eyebrow {
   margin-bottom: 17px;
@@ -337,7 +337,7 @@
 .service-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
+  gap: var(--space-22);
 }
 .service-card {
   display: block;
@@ -526,7 +526,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 30px;
+  gap: var(--space-30);
 }
 .cta-band .eyebrow {
   color: #bbcde6;
@@ -570,7 +570,7 @@ footer {
 .footer-bottom {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
+  gap: var(--space-20);
   padding-top: 23px;
   font-size: 9px;
   color: var(--muted);
