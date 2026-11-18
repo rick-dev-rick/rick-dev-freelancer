@@ -1,183 +1,76 @@
-import Icon from "../components/Icon";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import ProjectVisual from "../components/ProjectVisual";
+import Icon from "../components/Icon";
 import CTA from "../components/CTA";
 import Process from "../components/Process";
 import { services } from "../data/services";
+import cover from "../assets/cases/nova-street-home.webp";
+import catalog from "../assets/cases/nova-street-catalog-mobile.webp";
+
+const casePath = "/projetos/nova-street";
+const views = {
+  Desktop: { src: cover, width: 1200, height: 760, caption: "Abertura da vitrine em desktop" },
+  Mobile: { src: catalog, width: 390, height: 760, caption: "Catálogo da demonstração a 390 px" },
+};
+
+function CaseStudy() {
+  const [view, setView] = useState("Desktop");
+  const image = views[view];
+  return (
+    <section className="container spread study" aria-labelledby="study-title">
+      <div>
+        <span className="eyebrow">Projeto em destaque</span>
+        <h2 id="study-title">NØVA STREET</h2>
+        <p>Da vitrine à sacola, o case combina direção de arte e navegação em uma jornada demonstrativa. Busca e filtros ficam na URL para compartilhar a seleção do catálogo.</p>
+        <Link className="text-link" to={casePath}>Ler o case <Icon /></Link>
+        <div className="view-switch" role="group" aria-label="Captura do projeto">
+          {Object.keys(views).map(name => (
+            <button type="button" key={name} aria-pressed={view === name} onClick={() => setView(name)}>{name}</button>
+          ))}
+        </div>
+        <Link className="text-link" to="/projetos">Ver todos os projetos <Icon /></Link>
+      </div>
+      <figure className="study-figure">
+        <div className="study-frame">
+          <img key={view} src={image.src} alt={image.caption} width={image.width} height={image.height} loading="lazy" />
+        </div>
+        <figcaption aria-live="polite">{image.caption}</figcaption>
+      </figure>
+    </section>
+  );
+}
+
 export default function Home() {
   return (
     <>
-      <section className="hero">
-        <div className="container hero-grid">
-          <div className="hero-copy">
-            <span className="eyebrow">
-              <i className="status-dot" /> DESENVOLVIMENTO WEB PARA NEGÓCIOS
-            </span>
-            <h1>
-              Seu negócio.
-              <br />
-              Uma presença
-              <br />
-              <em>à altura.</em>
-            </h1>
-            <p>
-              Sites bem pensados para apresentar sua marca, valorizar seus
-              serviços e facilitar o próximo contato.
-            </p>
-            <div className="hero-actions">
-              <Link className="button" to="/contato">
-                Quero um site para meu negócio{" "}
-                <span aria-hidden="true">
-                  <Icon />
-                </span>
-              </Link>
-              <Link className="text-link" to="/projetos">
-                Conhecer os projetos{" "}
-                <span aria-hidden="true">
-                  <Icon />
-                </span>
-              </Link>
-            </div>
-            <div className="hero-note">
-              <span>Design com propósito.</span>
-              <span>Código com cuidado.</span>
-            </div>
-          </div>
-          <div className="hero-showcase">
-            <div className="showcase-label">
-              <span>IDEIAS QUE GANHAM FORMA</span>
-              <span>PORTFÓLIO / 01</span>
-            </div>
-            <ProjectVisual project="nova" hero />
-            <div className="showcase-caption">
-              <span>
-                <b>NØVA STREET</b>
-                <small>E-commerce demonstrativo · React</small>
-              </span>
-              <Link to="/projetos/nova-street" aria-label="Conhecer o case NØVA STREET">
-                <Icon />
-              </Link>
-            </div>
-            <div className="floating-note">
-              <span>
-                <Icon name="horizontal" />
-              </span>
-              <div>
-                Pensado para cada tela.
-                <small>Do primeiro clique ao celular.</small>
-              </div>
-            </div>
-          </div>
+      <section className="container editorial-hero">
+        <div className="editorial-title">
+          <span className="eyebrow">Estúdio independente · Front-end</span>
+          <h1>Interfaces<br />com <em>intenção.</em></h1>
+          <p>Sites e experiências digitais para marcas que precisam explicar bem o que fazem.</p>
+          <Link className="button" to="/contato">Conversar sobre meu projeto <Icon /></Link>
+        </div>
+        <figure className="editorial-proof">
+          <Link to={casePath} aria-label="Conhecer o case NØVA STREET">
+            <img src={cover} alt="Abertura da vitrine NØVA STREET em desktop" width="1200" height="760" fetchPriority="high" />
+          </Link>
+          <figcaption><Link to={casePath}>NØVA STREET ↗</Link><span>Vitrine demonstrativa</span></figcaption>
+        </figure>
+        <svg className="editorial-stamp" aria-hidden="true" viewBox="0 0 238 163"><text x="0" y="160">rd.</text></svg>
+      </section>
+      <section className="container spread">
+        <div><span className="eyebrow">O que desenvolvo</span><h2>Do primeiro clique à página final.</h2></div>
+        <div className="service-index">
+          {services.map((service, index) => (
+            <details key={service.number} open={index === 0}>
+              <summary>{service.title}</summary>
+              <p>{service.text}</p>
+              <Link className="text-link" to={`/servicos#servico-${service.number}`}>Conhecer a solução <Icon /></Link>
+            </details>
+          ))}
         </div>
       </section>
-      <div className="value-strip">
-        <div className="container">
-          <span>
-            <Icon name="sparkle" />
-            Clareza na comunicação
-          </span>
-          <span>
-            <Icon name="sparkle" />
-            Experiência responsiva
-          </span>
-          <span>
-            <Icon name="sparkle" />
-            Orçamento sob medida
-          </span>
-          <span>
-            <Icon name="sparkle" />
-            Desenvolvimento em React
-          </span>
-        </div>
-      </div>
-      <section className="section">
-        <div className="container">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">O QUE POSSO CONSTRUIR COM VOCÊ</span>
-              <h2>
-                Soluções digitais.
-                <br />
-                Objetivos reais.
-              </h2>
-            </div>
-            <Link className="text-link" to="/servicos">
-              Explorar os serviços <Icon />
-            </Link>
-          </div>
-          <div className="service-grid">
-            {services.map((s) => (
-              <Link className="service-card" key={s.number} to={`/servicos#servico-${s.number}`}>
-                <span className="service-number">
-                  {s.number}
-                  <b>
-                    <Icon />
-                  </b>
-                </span>
-                <h3>{s.title}</h3>
-                <p>{s.text}</p>
-                <span className="service-bottom">
-                  Conhecer a solução{" "}
-                  <span>
-                    <Icon />
-                  </span>
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-      <section className="section featured">
-        <div className="container">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">MENOS PROMESSA. MAIS PROJETO.</span>
-              <h2>
-                Do conceito
-                <br />à experiência.
-              </h2>
-            </div>
-            <p>
-              Projetos pessoais e demonstrativos que
-              <br className="desktop" /> mostram meu trabalho na prática.
-            </p>
-          </div>
-          <div className="featured-grid">
-            <Link to="/projetos" className="featured-main">
-              <ProjectVisual project="os" />
-              <h3>
-                RICK_DEV OS{" "}
-                <span>
-                  <Icon />
-                </span>
-              </h3>
-              <p>Interface, organização e desenvolvimento web.</p>
-            </Link>
-            <div className="featured-copy">
-              <span className="eyebrow">DESIGN + DESENVOLVIMENTO</span>
-              <h3>
-                O cuidado aparece
-                <br />
-                em cada interação.
-              </h3>
-              <p>
-                Uma loja, um painel ou uma experiência pessoal: cada projeto
-                começa por entender como as pessoas vão usá-lo.
-              </p>
-              <Link to="/projetos" className="text-link">
-                Ver todos os projetos <Icon />
-              </Link>
-              <span className="mini-index">
-                01 / NØVA STREET
-                <br />
-                02 / RICK_DEV OS
-                <br />
-                03 / PARA RAFAELA
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CaseStudy />
       <Process />
       <CTA />
     </>

@@ -83,7 +83,7 @@ export default function Layout() {
           </Link>
         </div>
       </header>
-      <main id="main" ref={mainContent} tabIndex="-1">
+      <main className={links.some(([url]) => url === pathname) || pathname === "/projetos/nova-street" ? "caderno" : undefined} id="main" ref={mainContent} tabIndex="-1">
         <Outlet context={briefDraft} />
       </main>
       <footer>

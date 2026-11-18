@@ -2,7 +2,7 @@
 
 ## Fundamentos e escala
 
-A identidade é clara, com azul de ação `--blue`, texto secundário `--muted`, linha `--line` e superfície `--paper`, definidos em [base.css](../src/styles/base.css). DM Sans é a família de leitura e Manrope a de títulos. O subgrupo latino é servido localmente com fallback de sistema. O contraste de textos e estados deve ser conferido no fundo efetivamente renderizado, inclusive durante animações.
+A identidade é clara, com azul de ação `--blue`, texto secundário `--muted`, linha `--line` e superfície `--paper`, definidos em [base.css](../src/styles/base.css). DM Sans conduz a leitura. Nas seis rotas públicas, Georgia e o fallback serifado do sistema compõem os títulos editoriais. Manrope identifica a marca e os títulos funcionais. A folha [caderno.css](../src/styles/caderno.css) define papel quente, tinta e filetes. O subgrupo latino é servido localmente com fallback de sistema. O contraste de textos e estados deve ser conferido no fundo efetivamente renderizado, inclusive durante animações.
 
 [spacing.css](../src/styles/spacing.css) centraliza os valores de espaçamento da aplicação. Os nomes numéricos representam pixels. O ritmo principal usa múltiplos de 4, com passos intermediários para dimensões existentes. A adoção preserva os valores computados da versão 2.0. Os valores de composição editorial específicos de uma cena permanecem no seu arquivo até haver reutilização clara.
 
@@ -51,6 +51,10 @@ Desktop, tablet e mobile partilham os tokens. As folhas responsivas continuam de
 ```
 
 Use um link quando o resultado é navegação e um botão quando o resultado é ação. Preserve o rótulo visível dentro do nome acessível e deixe o ícone decorativo. Em cartões com vários destinos, mantenha links independentes. Uma captura informativa do case conserva texto alternativo e legenda com contraste próprio.
+
+## Caderno de Projeto
+
+Na Home, cada serviço usa um sumário nativo e mantém o link para sua seção. A galeria alterna as capturas de desktop e celular com botões de estado anunciado e legenda. O quadro reserva espaço durante a troca. A abertura anima apenas a fotografia e a assinatura por até 950 ms. No celular a distância cai à metade e a assinatura sai da composição. Movimento reduzido exibe o estado final.
 
 ## Manutenção
 

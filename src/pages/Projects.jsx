@@ -45,7 +45,7 @@ export default function Projects() {
           ))}
         </div>
         <p className="project-disclaimer">
-          As imagens dos cards são representações visuais dos projetos. No case
+          A NØVA STREET aparece em uma captura real. Os demais cards usam representações visuais dos projetos. No case
           NØVA STREET, compras, frete e checkout são demonstrativos, sem
           pagamentos reais.
         </p>

@@ -1,10 +1,16 @@
 import { Link } from "react-router-dom";
 import Icon from "./Icon";
 import ProjectVisual from "./ProjectVisual";
+import cover from "../assets/cases/nova-street-home.webp";
+
 export default function ProjectCard({ project }) {
   return (
     <article className="project-card">
-      <ProjectVisual project={project.id} />
+      {project.id === "nova" ? (
+        <Link to={project.casePath} aria-label="Explorar a vitrine NØVA STREET">
+          <img className="project-cover" src={cover} alt="Abertura da vitrine NØVA STREET" width="1200" height="760" loading="lazy" />
+        </Link>
+      ) : <ProjectVisual project={project.id} />}
       <div className="project-info">
         <span className="eyebrow">{project.type}</span>
         <h2>{project.name}</h2>

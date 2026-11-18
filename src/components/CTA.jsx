@@ -5,11 +5,11 @@ export default function CTA() {
     <section className="cta-band">
       <div className="container cta-inner">
         <div>
-          <span className="eyebrow">VAMOS TIRAR SUA IDEIA DO PAPEL?</span>
+          <span className="eyebrow">PROJETO NOVO</span>
           <h2>
-            O próximo projeto
+            O que seu site
             <br />
-            pode ser o seu.
+            precisa fazer?
           </h2>
         </div>
         <div>

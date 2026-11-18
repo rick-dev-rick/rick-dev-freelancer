@@ -2,13 +2,13 @@ const { createServer } = require('node:http');
 const { readFile, mkdir, writeFile, readdir } = require('node:fs/promises');
 const path = require('node:path');
 const assert = require('node:assert/strict');
-const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const { chromium, webkit } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const dist = path.resolve(process.argv[2] || 'dist');
 const out = path.resolve(process.argv[3] || 'artifacts');
 const isBaseline = process.argv.includes('--baseline');
 const basePath = process.env.PUBLIC_BASE || '/rick-dev-freelancer/';
 const widths = [320, 375, 390, 768, 1024, 1440];
-const routes = { '': 'Home', servicos: 'Serviços', projetos: 'Projetos', sobre: 'Sobre', contato: 'Contato' };
+const routes = { 'projetos/nova-street': 'NØVA STREET', '': 'Home', servicos: 'Serviços', projetos: 'Projetos', sobre: 'Sobre', contato: 'Contato' };
 const types = { '.css': 'text/css', '.js': 'text/javascript', '.woff2': 'font/woff2', '.webp': 'image/webp', '.html': 'text/html' };
 
 const server = createServer(async (req, res) => {
@@ -26,14 +26,15 @@ const server = createServer(async (req, res) => {
   await mkdir(out, { recursive: true });
   await new Promise((done, fail) => server.once('error', fail).listen(0, '127.0.0.1', done));
   const url = 'http://127.0.0.1:' + server.address().port + basePath;
-  const browser = await chromium.launch({
+  const engine = process.env.QA_ENGINE === "webkit" ? webkit : chromium;
+  const browser = await engine.launch(engine === webkit ? {} : {
     executablePath: process.env.CHROMIUM_PATH || undefined,
     args: process.env.CHROMIUM_SINGLE_PROCESS ? ['--no-zygote', '--single-process'] : [],
   });
   const context = await browser.newContext({ deviceScaleFactor: 1 });
   const page = await context.newPage();
   const errors = [], findings = [], flows = {}, resources = [];
-  const report = { browser: browser.version(), http: url, findings, flows, errors, resources, capturedAt: new Date().toISOString() };
+  const report = { engine: engine.name(), browser: browser.version(), http: url, findings, flows, errors, resources, capturedAt: new Date().toISOString() };
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   page.on('pageerror', e => errors.push(String(e)));
   page.on('requestfailed', r => resources.push({ url: r.url(), error: r.failure()?.errorText }));
@@ -67,7 +68,7 @@ const server = createServer(async (req, res) => {
         const measured = await page.evaluate(route => {
           const button = [...document.querySelectorAll('main a')].find(a => a.textContent.includes('Conversar no WhatsApp'));
           const rect = button?.getBoundingClientRect();
-          const animated = document.querySelector('.hero-actions .button');
+          const animated = document.querySelector('.editorial-title .button');
           return {
             heading: document.querySelector('main h1').innerText,
             scrollWidth: document.documentElement.scrollWidth,
@@ -87,11 +88,25 @@ const server = createServer(async (req, res) => {
             return result.violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => ({ selector: n.target, summary: n.failureSummary })) }));
           });
         }
-        if ([320, 1440].includes(width)) await screenshot((route || 'home') + '-' + width);
+        await screenshot((route || 'home').replaceAll('/', '-') + '-' + width);
       }
     }
     await page.setViewportSize({ width: 320, height: 844 });
     await go('');
+    if (!isBaseline) {
+      const cta = page.locator('.editorial-title .button');
+      assert.ok(await cta.isVisible());
+      assert.equal(await cta.getAttribute('href'), '#/contato');
+      const mobile = page.getByRole('button', {name: 'Mobile', exact: true});
+      await mobile.press('Enter');
+      assert.equal(await mobile.getAttribute('aria-pressed'), 'true');
+      await page.locator('.study-frame img').evaluate(img => img.decode());
+      assert.equal(await page.locator('.study-frame img').evaluate(img => img.naturalWidth), 390);
+      await page.emulateMedia({reducedMotion: 'reduce'});
+      assert.equal(await page.locator('.editorial-proof img').evaluate(el => getComputedStyle(el).animationName), 'none');
+      await page.emulateMedia({reducedMotion: 'no-preference'});
+      flows.editorial = { heroCTA: true, galleryKeyboard: true, reducedOpening: true };
+    }
     await page.getByRole('link', { name: 'Conhecer o case NØVA STREET' }).click();
     await page.waitForFunction(() => location.hash.includes('/projetos'));
     await page.waitForFunction(() => /^Projetos|^NØVA STREET/.test(document.title));
@@ -190,7 +205,9 @@ const server = createServer(async (req, res) => {
       assert.equal(motion.endTransform, 'none');
       flows.motion = { normal: motion, reduced, reducedHover };
       await go('');
-      await page.locator('.service-card').nth(1).press('Enter');
+      const service = page.locator('.service-index details').nth(1);
+      await service.locator('summary').press('Enter');
+      await service.getByRole('link', {name: 'Conhecer a solução'}).press('Enter');
       await page.waitForFunction(() => document.activeElement.id === 'servico-02');
       assert.equal(await page.locator('#servico-02').innerText(), 'Landing pages');
       flows.serviceDestination = 'servico-02';
