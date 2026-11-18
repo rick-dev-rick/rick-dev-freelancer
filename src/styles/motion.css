@@ -1,0 +1,98 @@
+/* Full, balanced and minimal scale only ornamental layers. Reduced keeps the final print. */
+:root {
+  --cut: 850ms;
+  --beat: 140ms;
+  --travel: 40px;
+  --lift: 85%;
+  --print-ease: cubic-bezier(.18,.82,.18,1);
+}
+@media (max-width: 1024px) {
+  :root { --cut: 660ms; --beat: 95ms; --travel: 22px; --lift: 65%; }
+}
+@media (max-width: 375px) {
+  :root { --cut: 470ms; --beat: 55ms; --travel: 12px; --lift: 40%; }
+}
+.type-window { display: block; overflow: clip; padding-bottom: .12em; margin-bottom: -.12em; }
+.type-window > span { display: block; }
+.editorial-hero, .editorial-proof > a, [data-scene] { position: relative; }
+.study-frame { position: relative; isolation: isolate; }
+.study-frame img { z-index: 1; grid-area: 1/1; background: #e2e5e7; }
+.study-previous { position: absolute; inset: 0; background: #e2e5e7 center/contain no-repeat; }
+.colophon {
+  display: flex; align-items: baseline; margin-bottom: var(--space-40);
+  padding-bottom: .12em; overflow: clip; border-bottom: 1px solid #9fb7d2;
+  font: 400 clamp(4.6rem,14vw,13rem)/1 var(--display); letter-spacing: -.085em;
+}
+.colophon span + span { color: #c3d5ea; font-style: italic; }
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes print-rule { from { transform: scaleX(0); } }
+  @keyframes print-line { from { transform: translateY(var(--lift)) rotate(1.6deg); } }
+  @keyframes print-plate { from { transform: scale(1.075) translateX(1.3%); } }
+  @keyframes lift-cover { to { transform: scaleX(0); } }
+  @keyframes slide-type { from { transform: translateX(calc(var(--travel)*-1)); } }
+  @keyframes stamp-type { from { transform: translateY(15%) rotate(-3deg); } }
+  @keyframes lay-print { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } }
+  @keyframes reverse-print { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0); } }
+  @keyframes margin-mark { from { transform: scaleY(0); } }
+  .type-window > span { animation: print-line var(--cut) var(--print-ease) both; }
+  .type-window + .type-window > span { animation-delay: var(--beat); }
+  .editorial-hero::before, [data-printed]::before {
+    content: ""; position: absolute; pointer-events: none; top: 0; left: 0;
+    height: 2px; width: 100%; background: var(--blue); transform-origin: left;
+    animation: print-rule var(--cut) var(--print-ease) both;
+  }
+  .editorial-hero::before { top: auto; bottom: 0; }
+  .editorial-proof > a::after {
+    content: ""; position: absolute; inset: 0; background: var(--blue);
+    pointer-events: none; transform-origin: right;
+    animation: lift-cover var(--cut) calc(var(--beat)*2) var(--print-ease) both;
+  }
+  .editorial-proof img { animation: print-plate calc(var(--cut)*1.4) var(--print-ease) both; }
+  .editorial-stamp { animation: stamp-type var(--cut) calc(var(--beat)*3) var(--print-ease) both; }
+  .study-frame img.print-change { animation: lay-print calc(var(--cut)*.72) var(--print-ease) both; }
+  .study-frame[data-view="Desktop"] img.print-change { animation-name: reverse-print; }
+  [data-scene="proof"][data-printed] h2,
+  [data-scene="portrait"][data-printed] .about-copy h2,
+  [data-scene="contents"][data-printed] h2 { animation: slide-type var(--cut) var(--print-ease); }
+  [data-scene="proof"][data-printed] .study-figure { animation: lay-print var(--cut) var(--beat) var(--print-ease) backwards; }
+  [data-scene="service"][data-printed] .detail-number,
+  [data-scene="portrait"][data-printed] .about-art > strong { animation: stamp-type var(--cut) var(--print-ease); }
+  [data-scene="plate"][data-printed] > :first-child { animation: lay-print var(--cut) var(--print-ease); }
+  [data-scene="plate"]::before, [data-scene="portrait"]::before { width: 18%; }
+  [data-scene="notes"][data-printed] article, [data-scene="steps"][data-printed] article {
+    animation: slide-type calc(var(--cut)*.65) var(--print-ease) backwards;
+  }
+  [data-printed] article:nth-of-type(2) { animation-delay: var(--beat); }
+  [data-printed] article:nth-of-type(3) { animation-delay: calc(var(--beat)*2); }
+  [data-scene="margin"][data-printed]::before {
+    width: 2px; height: 40px; left: -8px; transform-origin: top; animation-name: margin-mark;
+  }
+  [data-scene="signature"][data-printed]::before { background: #b5cce2; }
+  [data-scene="signature"][data-printed] .colophon span { animation: print-line var(--cut) var(--print-ease); }
+  [data-scene="signature"][data-printed] .colophon span + span { animation: slide-type var(--cut) var(--beat) var(--print-ease) backwards; }
+  .caderno .page-intro h1, .caderno .case-story h1 { animation: slide-type calc(var(--cut)*.65) var(--print-ease); }
+  .caderno :is(.text-link,.button,.project-links a) .icon { transition: transform 180ms var(--print-ease); }
+  .caderno :is(.text-link,.button,.project-links a):is(:focus-visible,:active) .icon { transform: translate(2px,-2px); }
+  .caderno .button:active { transform: scale(.98); }
+  .project-card:focus-within .project-info h2 { text-decoration: underline; text-underline-offset: .12em; }
+  @media (hover: hover) {
+    .caderno :is(.text-link,.button,.project-links a):hover .icon { transform: translate(3px,-3px); }
+    .project-cover { transition: transform 320ms var(--print-ease); }
+    .project-card > a:first-child { overflow: clip; }
+    .project-card:hover .project-cover { transform: scale(1.025); }
+  }
+  @media (max-width: 760px) {
+    .header .nav {
+      display: flex; flex-direction: column; gap: var(--space-6);
+      visibility: hidden; pointer-events: none; clip-path: inset(0 0 100% 0);
+      max-height: calc(100dvh - 80px); overflow-y: auto;
+      transition: clip-path 220ms var(--print-ease), visibility 0s 220ms;
+    }
+    .header .nav.open { visibility: visible; pointer-events: auto; clip-path: inset(0); transition-delay: 0s; }
+    .nav.open a { animation: slide-type 280ms calc(var(--order)*35ms) var(--print-ease) backwards; }
+    .menu-toggle[aria-expanded="true"] { background: var(--blue); color: white; }
+  }
+  @media (max-width: 375px) {
+    .editorial-proof img, [data-scene="notes"][data-printed] article, [data-scene="steps"][data-printed] article { animation: none; }
+  }
+}

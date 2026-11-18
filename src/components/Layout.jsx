@@ -1,7 +1,13 @@
+import useEditorialScenes from "./useEditorialScenes";
 import Icon from "./Icon";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useSyncExternalStore } from "react";
 import { NavLink, Link, Outlet, useLocation } from "react-router-dom";
 import { contact, whatsappUrl, emailUrl } from "../lib/contact";
+const mobileMenu = window.matchMedia("(max-width: 760px)");
+function watchMobileMenu(listener) {
+  mobileMenu.addEventListener("change", listener);
+  return () => mobileMenu.removeEventListener("change", listener);
+}
 const links = [
   ["/", "Home"],
   ["/servicos", "Serviços"],
@@ -11,10 +17,12 @@ const links = [
 ];
 export default function Layout() {
   const [open, setOpen] = useState(false);
+  const narrow = useSyncExternalStore(watchMobileMenu, () => mobileMenu.matches);
   const { pathname, hash } = useLocation();
   const previousPath = useRef(pathname);
   const menuButton = useRef(null);
   const mainContent = useRef(null);
+  useEditorialScenes(mainContent, pathname);
   const briefDraft = useRef(null);
   useEffect(() => {
     setOpen(false);
@@ -66,11 +74,12 @@ export default function Layout() {
           </button>
           <nav
             id="main-nav"
+            inert={narrow && !open}
             className={open ? "nav open" : "nav"}
             aria-label="Navegação principal"
           >
-            {links.map(([url, label]) => (
-              <NavLink key={url} to={url} end={url === "/"}>
+            {links.map(([url, label], index) => (
+              <NavLink style={{ "--order": index }} onClick={() => { if (open && pathname === url) mainContent.current?.focus(); setOpen(false); }} key={url} to={url} end={url === "/"}>
                 {label}
               </NavLink>
             ))}

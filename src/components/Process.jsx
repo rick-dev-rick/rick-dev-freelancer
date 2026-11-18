@@ -34,7 +34,7 @@ export default function Process() {
             <br className="desktop" /> as decisões do seu projeto.
           </p>
         </div>
-        <div className="process-grid">
+        <div className="process-grid" data-scene="steps">
           {steps.map(([name, text], i) => (
             <article key={name}>
               <span>0{i + 1}</span>

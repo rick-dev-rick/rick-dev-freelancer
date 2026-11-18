@@ -16,7 +16,7 @@ export default function About() {
           experiência de quem vai usar o seu site.
         </p>
       </section>
-      <section className="container about-grid">
+      <section className="container about-grid" data-scene="portrait">
         <div className="about-art" aria-hidden="true">
           <span className="eyebrow">DESIGN / CÓDIGO / PROPÓSITO</span>
           <strong>
@@ -62,7 +62,7 @@ export default function About() {
         </div>
       </section>
       <section className="section">
-        <div className="container principles">
+        <div className="container principles" data-scene="notes">
           <article>
             <span>01 / COMUNICAÇÃO</span>
             <h3>Conversa direta.</h3>

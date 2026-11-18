@@ -100,7 +100,7 @@ const server = createServer(async (req, res) => {
       const mobile = page.getByRole('button', {name: 'Mobile', exact: true});
       await mobile.press('Enter');
       assert.equal(await mobile.getAttribute('aria-pressed'), 'true');
-      await page.locator('.study-frame img').evaluate(img => img.decode());
+      await page.waitForFunction(() => document.querySelector('.study-frame img')?.naturalWidth === 390);
       assert.equal(await page.locator('.study-frame img').evaluate(img => img.naturalWidth), 390);
       await page.emulateMedia({reducedMotion: 'reduce'});
       assert.equal(await page.locator('.editorial-proof img').evaluate(el => getComputedStyle(el).animationName), 'none');

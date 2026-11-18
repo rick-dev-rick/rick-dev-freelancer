@@ -1,8 +1,9 @@
 import Icon from "./Icon";
 import { Link } from "react-router-dom";
-export default function CTA() {
+export default function CTA({ signed = false }) {
   return (
-    <section className="cta-band">
+    <section className="cta-band" data-scene={signed ? "signature" : undefined}>
+      {signed && <div className="container colophon" aria-hidden="true"><span>rick</span><span>_dev</span></div>}
       <div className="container cta-inner">
         <div>
           <span className="eyebrow">PROJETO NOVO</span>

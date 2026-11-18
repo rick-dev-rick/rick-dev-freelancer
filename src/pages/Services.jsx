@@ -20,7 +20,7 @@ export default function Services() {
       </section>
       <section className="container service-details">
         {services.map((s) => (
-          <article key={s.number}>
+          <article data-scene="service" key={s.number}>
             <span className="detail-number">{s.number}</span>
             <div>
               <h2 id={`servico-${s.number}`} tabIndex={-1}>{s.title}</h2>

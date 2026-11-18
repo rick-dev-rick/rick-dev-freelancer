@@ -5,7 +5,7 @@ import cover from "../assets/cases/nova-street-home.webp";
 
 export default function ProjectCard({ project }) {
   return (
-    <article className="project-card">
+    <article className="project-card" data-scene="plate">
       {project.id === "nova" ? (
         <Link to={project.casePath} aria-label="Explorar a vitrine NØVA STREET">
           <img className="project-cover" src={cover} alt="Abertura da vitrine NØVA STREET" width="1200" height="760" loading="lazy" />

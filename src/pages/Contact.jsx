@@ -117,7 +117,7 @@ function ContactPage({ location }) {
           Já enviou um pedido? Acompanhar minhas mensagens
         </Link>
       </section>
-      <section className="container contact-grid">
+      <section className="container contact-grid" data-scene="margin">
         <aside>
           <span className="eyebrow">ORÇAMENTO PERSONALIZADO</span>
           <h2>
@@ -289,7 +289,7 @@ function ContactPage({ location }) {
         </form>
       </section>
       <section className="section">
-        <div className="container faq">
+        <div className="container faq" data-scene="margin">
           <span className="eyebrow">ANTES DE COMEÇAR</span>
           <h2>Algumas respostas úteis.</h2>
           {[

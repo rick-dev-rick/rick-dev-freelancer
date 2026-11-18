@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Icon from "../components/Icon";
 import CTA from "../components/CTA";
@@ -15,9 +15,33 @@ const views = {
 
 function CaseStudy() {
   const [view, setView] = useState("Desktop");
+  const [previous, setPrevious] = useState(null);
+  const [selected, setSelected] = useState("Desktop");
+  const [notice, setNotice] = useState("");
+  const requested = useRef(view);
   const image = views[view];
+  async function selectView(name) {
+    requested.current = name;
+    setSelected(name);
+    setNotice("");
+    if (name === view) return;
+    const preload = new Image();
+    preload.src = views[name].src;
+    try {
+      await preload.decode();
+    } catch {
+      if (requested.current === name) {
+        setSelected(view);
+        setNotice("A captura não carregou. Tente novamente.");
+      }
+      return;
+    }
+    if (requested.current !== name) return;
+    setPrevious(view);
+    setView(name);
+  }
   return (
-    <section className="container spread study" aria-labelledby="study-title">
+    <section className="container spread study" data-scene="proof" aria-labelledby="study-title">
       <div>
         <span className="eyebrow">Projeto em destaque</span>
         <h2 id="study-title">NØVA STREET</h2>
@@ -25,16 +49,17 @@ function CaseStudy() {
         <Link className="text-link" to={casePath}>Ler o case <Icon /></Link>
         <div className="view-switch" role="group" aria-label="Captura do projeto">
           {Object.keys(views).map(name => (
-            <button type="button" key={name} aria-pressed={view === name} onClick={() => setView(name)}>{name}</button>
+            <button type="button" key={name} aria-pressed={selected === name} onClick={() => selectView(name)}>{name}</button>
           ))}
         </div>
         <Link className="text-link" to="/projetos">Ver todos os projetos <Icon /></Link>
       </div>
       <figure className="study-figure">
-        <div className="study-frame">
-          <img key={view} src={image.src} alt={image.caption} width={image.width} height={image.height} loading="lazy" />
+        <div className="study-frame" data-view={view}>
+          {previous && <span className="study-previous" aria-hidden="true" style={{ backgroundImage: `url(${views[previous].src})` }} />}
+          <img key={view} className={previous ? "print-change" : undefined} src={image.src} alt={image.caption} width={image.width} height={image.height} loading="lazy" />
         </div>
-        <figcaption aria-live="polite">{image.caption}</figcaption>
+        <figcaption aria-live="polite">{notice || image.caption}</figcaption>
       </figure>
     </section>
   );
@@ -46,7 +71,7 @@ export default function Home() {
       <section className="container editorial-hero">
         <div className="editorial-title">
           <span className="eyebrow">Estúdio independente · Front-end</span>
-          <h1>Interfaces<br />com <em>intenção.</em></h1>
+          <h1 aria-label="Interfaces com intenção."><span className="type-window"><span>Interfaces</span></span>{" "}<span className="type-window"><span>com <em>intenção.</em></span></span></h1>
           <p>Sites e experiências digitais para marcas que precisam explicar bem o que fazem.</p>
           <Link className="button" to="/contato">Conversar sobre meu projeto <Icon /></Link>
         </div>
@@ -58,7 +83,7 @@ export default function Home() {
         </figure>
         <svg className="editorial-stamp" aria-hidden="true" viewBox="0 0 238 163"><text x="0" y="160">rd.</text></svg>
       </section>
-      <section className="container spread">
+      <section className="container spread" data-scene="contents">
         <div><span className="eyebrow">O que desenvolvo</span><h2>Do primeiro clique à página final.</h2></div>
         <div className="service-index">
           {services.map((service, index) => (
@@ -72,7 +97,7 @@ export default function Home() {
       </section>
       <CaseStudy />
       <Process />
-      <CTA />
+      <CTA signed />
     </>
   );
 }
