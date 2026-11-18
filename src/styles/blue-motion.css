@@ -1,0 +1,58 @@
+/* A signed colophon opens like inked sheets pivoting at the binding. */
+.cta-band { isolation: isolate; overflow: clip; }
+.ink-leaves {
+  position: absolute; inset: 0 0 0 auto; height: 100%; width: 64%;
+  z-index: -1; pointer-events: none;
+}
+.ink-leaf { transform-origin: 20px 410px; }
+.ink-leaf path { stroke: #527298; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.ink-leaf.far { fill: #1c3b62; --angle: 29deg; }
+.ink-leaf.middle { fill: #17375d; --angle: 20deg; }
+.ink-leaf.near { fill: #122944; --angle: 12deg; }
+
+.study-figure figcaption { position: relative; }
+.study-figure figcaption::after {
+  content: ""; position: absolute; left: 0; bottom: -1px;
+  width: 28%; height: 2px; background: var(--blue); pointer-events: none;
+  transform: translateX(0);
+}
+.study-figure figcaption[data-view="Mobile"]::after { transform: translateX(257%); }
+
+@media (max-width: 760px) {
+  .ink-leaves { width: 83%; height: 62%; }
+  .ink-leaf { transform-origin: 600px 0; }
+  .ink-leaf.far { --angle: -21deg; }
+  .ink-leaf.middle { --angle: -12deg; }
+  .ink-leaf.near { display: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes open-ink-leaf {
+    from { transform: rotate(var(--angle)); }
+    to { transform: rotate(0); }
+  }
+  @keyframes turn-paper-edge {
+    from { transform: scaleY(1); }
+    to { transform: scaleY(0); }
+  }
+  .cta-band[data-printed]::after {
+    content: ""; position: absolute; inset: -1px 0 auto; z-index: -1;
+    height: min(9%,36px); background: var(--sheet); pointer-events: none;
+    clip-path: polygon(0 0,100% 0,100% 12%,0 100%);
+    transform-origin: top;
+    animation: turn-paper-edge calc(var(--cut)*.68) var(--settle) both;
+  }
+  [data-scene="signature"][data-printed]::after { height: min(14%,64px); }
+  [data-scene="signature"][data-printed] .ink-leaf {
+    animation: open-ink-leaf calc(var(--cut)*1.24) var(--settle) backwards;
+  }
+  [data-scene="signature"][data-printed] .middle { animation-delay: var(--beat); }
+  [data-scene="signature"][data-printed] .near { animation-delay: calc(var(--beat)*2); }
+  [data-scene="invitation"][data-printed]::before { background: #809fbd; width: 38%; }
+  .study-figure figcaption::after { transition: transform calc(var(--cut)*.72) var(--print-ease); }
+  .caderno :is(.view-switch,.project-filters) button:not(:disabled),
+  .caderno .button:not(:disabled) { transition: transform 120ms ease-out, background-color 120ms ease-out; }
+  .caderno :is(.view-switch,.project-filters) button:not(:disabled):active { transform: translateY(1px); }
+  .caderno .button:not(:disabled):active { transform: translateY(1px) scale(.985); }
+  .caderno :is(.view-switch,.project-filters) button:focus-visible { text-decoration: underline; text-underline-offset: .19em; }
+}

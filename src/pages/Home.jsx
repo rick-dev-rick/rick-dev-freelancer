@@ -63,7 +63,7 @@ function CaseStudy() {
           {previous && <span key={previous} className="study-previous" aria-hidden="true" style={{ backgroundImage: `url(${views[previous].src})` }} />}
           <img ref={plate} key={view} className={previous ? "print-change" : undefined} src={image.src} alt={image.caption} width={image.width} height={image.height} loading="lazy" />
         </div>
-        <figcaption aria-live="polite"><span key={view} className={previous ? "print-caption" : undefined}>{notice || image.caption}</span></figcaption>
+        <figcaption data-view={view} aria-live="polite"><span key={view} className={previous ? "print-caption" : undefined}>{notice || image.caption}</span></figcaption>
       </figure>
     </section>
   );

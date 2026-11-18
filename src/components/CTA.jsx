@@ -2,7 +2,14 @@ import Icon from "./Icon";
 import { Link } from "react-router-dom";
 export default function CTA({ signed = false }) {
   return (
-    <section className="cta-band" data-scene={signed ? "signature" : undefined}>
+    <section className="cta-band" data-scene={signed ? "signature" : "invitation"}>
+      {signed && (
+        <svg className="ink-leaves" aria-hidden="true" focusable="false" viewBox="0 0 600 400" preserveAspectRatio="none">
+          <g className="ink-leaf far"><path d="M20 410 L265 -60 H640 V410 Z" /></g>
+          <g className="ink-leaf middle"><path d="M20 410 L366 -60 H640 V410 Z" /></g>
+          <g className="ink-leaf near"><path d="M20 410 L505 -60 H640 V410 Z" /></g>
+        </svg>
+      )}
       {signed && (
         <div className="container colophon" aria-hidden="true">
           <span>rick</span><span>_dev</span>
