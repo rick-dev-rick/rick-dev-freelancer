@@ -4,6 +4,8 @@
   --beat: 140ms;
   --travel: 40px;
   --lift: 85%;
+  --fold-edge: #819bb7;
+  --settle: cubic-bezier(.22,.75,.22,1);
   --print-ease: cubic-bezier(.18,.82,.18,1);
 }
 @media (max-width: 1024px) {
@@ -24,15 +26,35 @@
   font: 400 clamp(4.6rem,14vw,13rem)/1 var(--display); letter-spacing: -.085em;
 }
 .colophon span + span { color: #c3d5ea; font-style: italic; }
+.signature-stroke { align-self: end; width: min(19%,180px); margin: 0 0 .07em .06em; }
+.signature-stroke path { stroke: #bdcee4; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 1; }
 @media (prefers-reduced-motion: no-preference) {
   @keyframes print-rule { from { transform: scaleX(0); } }
   @keyframes print-line { from { transform: translateY(var(--lift)) rotate(1.6deg); } }
   @keyframes print-plate { from { transform: scale(1.075) translateX(1.3%); } }
-  @keyframes lift-cover { to { transform: scaleX(0); } }
+  @keyframes fold-away {
+    from { transform: translateX(0) skewX(-7deg); }
+    to { transform: translateX(118%) skewX(-7deg); }
+  }
+  @keyframes fold-up {
+    from { transform: translateY(0) skewY(-4deg); }
+    to { transform: translateY(-118%) skewY(-4deg); }
+  }
   @keyframes slide-type { from { transform: translateX(calc(var(--travel)*-1)); } }
   @keyframes stamp-type { from { transform: translateY(15%) rotate(-3deg); } }
   @keyframes lay-print { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } }
-  @keyframes reverse-print { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0); } }
+  @keyframes exhibit-in {
+    from { clip-path: polygon(0 0,0 0,0 100%,0 100%); }
+    48% { clip-path: polygon(0 0,68% 0,49% 100%,0 100%); }
+    to { clip-path: polygon(0 0,100% 0,100% 100%,0 100%); }
+  }
+  @keyframes exhibit-back {
+    from { clip-path: polygon(100% 0,100% 0,100% 100%,100% 100%); }
+    48% { clip-path: polygon(32% 0,100% 0,100% 100%,51% 100%); }
+    to { clip-path: polygon(0 0,100% 0,100% 100%,0 100%); }
+  }
+  @keyframes plate-recede { to { transform: scale(.955); } }
+  @keyframes write-stroke { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
   @keyframes margin-mark { from { transform: scaleY(0); } }
   .type-window > span { animation: print-line var(--cut) var(--print-ease) both; }
   .type-window + .type-window > span { animation-delay: var(--beat); }
@@ -42,15 +64,26 @@
     animation: print-rule var(--cut) var(--print-ease) both;
   }
   .editorial-hero::before { top: auto; bottom: 0; }
+  .editorial-proof > a::before, .editorial-proof > a::after {
+    content: ""; position: absolute; z-index: 1; inset: -12%; pointer-events: none;
+    background: var(--fold-edge);
+    animation: fold-away var(--cut) calc(var(--beat)*2) var(--settle) both;
+  }
   .editorial-proof > a::after {
-    content: ""; position: absolute; inset: 0; background: var(--blue);
-    pointer-events: none; transform-origin: right;
-    animation: lift-cover var(--cut) calc(var(--beat)*2) var(--print-ease) both;
+    background: var(--blue); animation-delay: var(--beat);
+  }
+  .editorial-proof figcaption { position: relative; }
+  .editorial-proof figcaption::after {
+    content: ""; position: absolute; bottom: 0; left: 0; width: 32%; height: 2px;
+    background: var(--blue); transform-origin: left;
+    animation: print-rule calc(var(--cut)*.65) calc(var(--beat)*3) var(--print-ease) backwards;
   }
   .editorial-proof img { animation: print-plate calc(var(--cut)*1.4) var(--print-ease) both; }
   .editorial-stamp { animation: stamp-type var(--cut) calc(var(--beat)*3) var(--print-ease) both; }
-  .study-frame img.print-change { animation: lay-print calc(var(--cut)*.72) var(--print-ease) both; }
-  .study-frame[data-view="Desktop"] img.print-change { animation-name: reverse-print; }
+  .study-previous { animation: plate-recede var(--cut) var(--settle) both; }
+  .print-caption { display: inline-block; animation: slide-type calc(var(--cut)*.5) var(--beat) var(--print-ease) backwards; }
+  .study-frame img.print-change { animation: exhibit-in var(--cut) var(--settle) both; }
+  .study-frame[data-view="Desktop"] img.print-change { animation-name: exhibit-back; }
   [data-scene="proof"][data-printed] h2,
   [data-scene="portrait"][data-printed] .about-copy h2,
   [data-scene="contents"][data-printed] h2 { animation: slide-type var(--cut) var(--print-ease); }
@@ -75,6 +108,26 @@
   .caderno :is(.text-link,.button,.project-links a):is(:focus-visible,:active) .icon { transform: translate(2px,-2px); }
   .caderno .button:active { transform: scale(.98); }
   .project-card:focus-within .project-info h2 { text-decoration: underline; text-underline-offset: .12em; }
+  /* The upright meets the horizontal rule at the contents / case handoff. */
+  :is([data-scene="contents"],[data-scene="proof"])[data-printed]::after {
+    content: ""; position: absolute; top: 0; left: 0; height: min(5vw,48px); width: 2px;
+    background: var(--blue); transform-origin: top;
+    animation: margin-mark calc(var(--cut)*.55) var(--beat) var(--print-ease) backwards;
+  }
+  [data-scene="service"][data-printed] h2,
+  [data-scene="plate"][data-printed] .project-info h2 {
+    animation: slide-type calc(var(--cut)*.7) var(--beat) var(--settle) backwards;
+  }
+  [data-scene="decision"][data-printed]::before { width: 22%; }
+  [data-scene="decision"][data-printed] h3 { animation: stamp-type calc(var(--cut)*.65) var(--settle); }
+  [data-printed] .signature-stroke path {
+    animation: write-stroke var(--cut) calc(var(--beat)*2) var(--settle) backwards;
+  }
+  [data-scene="signature"][data-printed] .cta-inner h2 {
+    animation: slide-type calc(var(--cut)*.6) calc(var(--beat)*3) var(--settle) backwards;
+  }
+  .project-card:focus-within .project-cover { transform: scale(1.015); }
+  .caderno .button:active .icon { transform: translate(4px,-3px); }
   @media (hover: hover) {
     .caderno :is(.text-link,.button,.project-links a):hover .icon { transform: translate(3px,-3px); }
     .project-cover { transition: transform 320ms var(--print-ease); }
@@ -82,17 +135,20 @@
     .project-card:hover .project-cover { transform: scale(1.025); }
   }
   @media (max-width: 760px) {
+    .editorial-proof > a::before, .editorial-proof > a::after { animation-name: fold-up; }
     .header .nav {
       display: flex; flex-direction: column; gap: var(--space-6);
-      visibility: hidden; pointer-events: none; clip-path: inset(0 0 100% 0);
+      visibility: hidden; pointer-events: none; clip-path: polygon(0 0,100% -12%,100% -12%,0 0);
       max-height: calc(100dvh - 80px); overflow-y: auto;
       transition: clip-path 220ms var(--print-ease), visibility 0s 220ms;
     }
-    .header .nav.open { visibility: visible; pointer-events: auto; clip-path: inset(0); transition-delay: 0s; }
+    .header .nav.open { visibility: visible; pointer-events: auto; clip-path: polygon(0 0,100% 0,100% 100%,0 100%); transition-delay: 0s; }
+    .nav.open .active::after { transform-origin: left; animation: print-rule 260ms 90ms var(--settle) backwards; }
     .nav.open a { animation: slide-type 280ms calc(var(--order)*35ms) var(--print-ease) backwards; }
     .menu-toggle[aria-expanded="true"] { background: var(--blue); color: white; }
   }
   @media (max-width: 375px) {
-    .editorial-proof img, [data-scene="notes"][data-printed] article, [data-scene="steps"][data-printed] article { animation: none; }
+    .editorial-proof > a::before { content: none; }
+    .study-previous, .editorial-proof img, [data-scene="notes"][data-printed] article, [data-scene="steps"][data-printed] article { animation: none; }
   }
 }

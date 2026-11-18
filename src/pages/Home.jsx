@@ -19,6 +19,7 @@ function CaseStudy() {
   const [selected, setSelected] = useState("Desktop");
   const [notice, setNotice] = useState("");
   const requested = useRef(view);
+  const plate = useRef(null);
   const image = views[view];
   async function selectView(name) {
     requested.current = name;
@@ -36,6 +37,9 @@ function CaseStudy() {
       }
       return;
     }
+    // Let the current cut settle before replacing its backing plate.
+    const running = plate.current?.getAnimations?.().filter(a => a.playState === "running") || [];
+    await Promise.allSettled(running.map(a => a.finished));
     if (requested.current !== name) return;
     setPrevious(view);
     setView(name);
@@ -56,10 +60,10 @@ function CaseStudy() {
       </div>
       <figure className="study-figure">
         <div className="study-frame" data-view={view}>
-          {previous && <span className="study-previous" aria-hidden="true" style={{ backgroundImage: `url(${views[previous].src})` }} />}
-          <img key={view} className={previous ? "print-change" : undefined} src={image.src} alt={image.caption} width={image.width} height={image.height} loading="lazy" />
+          {previous && <span key={previous} className="study-previous" aria-hidden="true" style={{ backgroundImage: `url(${views[previous].src})` }} />}
+          <img ref={plate} key={view} className={previous ? "print-change" : undefined} src={image.src} alt={image.caption} width={image.width} height={image.height} loading="lazy" />
         </div>
-        <figcaption aria-live="polite">{notice || image.caption}</figcaption>
+        <figcaption aria-live="polite"><span key={view} className={previous ? "print-caption" : undefined}>{notice || image.caption}</span></figcaption>
       </figure>
     </section>
   );

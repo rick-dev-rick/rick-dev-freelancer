@@ -102,6 +102,14 @@ const server = createServer(async (req, res) => {
       assert.equal(await mobile.getAttribute('aria-pressed'), 'true');
       await page.waitForFunction(() => document.querySelector('.study-frame img')?.naturalWidth === 390);
       assert.equal(await page.locator('.study-frame img').evaluate(img => img.naturalWidth), 390);
+      const desktop = page.getByRole('button', {name: 'Desktop', exact: true});
+      await desktop.press('Enter');
+      await mobile.press('Enter');
+      await desktop.press('Enter');
+      await page.waitForFunction(() => document.querySelector('.study-frame')?.dataset.view === 'Desktop');
+      assert.equal(await desktop.getAttribute('aria-pressed'), 'true');
+      await page.locator('.study-frame img').evaluate(img => img.decode());
+      assert.equal(await page.locator('.study-frame img').evaluate(img => img.naturalWidth), 1200);
       await page.emulateMedia({reducedMotion: 'reduce'});
       assert.equal(await page.locator('.editorial-proof img').evaluate(el => getComputedStyle(el).animationName), 'none');
       await page.emulateMedia({reducedMotion: 'no-preference'});

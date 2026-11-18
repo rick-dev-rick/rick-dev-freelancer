@@ -56,10 +56,10 @@ export default function NovaCase() {
           </figure>
         </div>
       </section>
-      <section className="container case-decisions" data-scene="notes" aria-labelledby="case-decisions">
+      <section className="container case-decisions" aria-labelledby="case-decisions">
         <h2 id="case-decisions">Decisões de projeto</h2>
         {details.map(({ title, text }) => (
-          <article key={title}>
+          <article data-scene="decision" key={title}>
             <h3>{title}</h3>
             <p>{text}</p>
           </article>
